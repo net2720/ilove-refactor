@@ -6,5 +6,3 @@ export const fontSize = {
   h3: "18px",
   but: "24px",
 };
-
-export default fontSize;
