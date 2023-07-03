@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { fontSize } from "../constants/fontSize";
-import { IconSearch } from "../assets";
+import { FiSearch } from "react-icons/fi";
 import React, { useState } from "react";
 
 export const SearchBar = () => {
@@ -26,31 +26,38 @@ export const SearchBar = () => {
           onChange={handleSearchInputChange}
         />
         <SearchButton onClick={handleSearchIconClick}>
-          <img alt="search-button" src={IconSearch} />
+          <FiSearch />
         </SearchButton>
       </SearchWrapper>
     </>
   );
 };
 
-const SearchInput = styled.input`
-  width: 90%;
-  margin-top: 3%;
-  padding: 1.5% 3.5%;
+const SearchWrapper = styled.form`
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 25px;
   border: 1px solid grey;
-  font-size: ${fontSize.h2};
+  margin: 0 auto;
 `;
 
-const SearchWrapper = styled.form`
-  max-width: 100%;
+const SearchInput = styled.input`
+  width: 80%;
+  padding: 1.5% 3.5%;
+  font-size: ${fontSize.h2};
+  border-style: none;
+  background: none;
+  outline: none;
 `;
 
 const SearchButton = styled.button`
-  position: relative;
   cursor: pointer;
-  background-color: white;
   border: none;
-  top: 5px;
-  left: -60px;
+  background: none;
+
+  svg {
+    font-size: 1.5em;
+  }
 `;

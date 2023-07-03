@@ -1,8 +1,6 @@
-import star from "../assets/star.svg";
 import map from "../assets/map.svg";
 import miniLogo from "../assets/miniLogo.svg";
 import myInfo from "../assets/myInfo.svg";
-import reservation from "../assets/reservation.svg";
 
 import { Link } from "react-router-dom";
 
@@ -61,11 +59,10 @@ const NavUl = styled.ul`
 const NavLi = styled.li`
   width: 20%;
   padding: 1%;
+  list-style-type: none;
 `;
 
 const NavA = styled(Link)`
-  color: ${colors.fontColor};
-
   color: ${colors.fontColor};
 `;
 
