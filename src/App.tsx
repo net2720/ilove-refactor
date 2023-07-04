@@ -3,14 +3,13 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { Home } from "./pages/Index";
 import { Navigation } from "./components/Navigation";
-import { SearchBar } from "./components/SearchBar";
-import { Header } from "./components/Header";
+
+import { SearchHp } from "./pages/SearchHp";
 
 const App: React.FC = () => {
   return (
     <>
       <Container>
-        <Header />
         <Routes>
           <Route
             path="/"
@@ -20,6 +19,17 @@ const App: React.FC = () => {
                   <title>아이사랑</title>
                 </Helmet>
                 <Home />
+              </>
+            }
+          ></Route>
+          <Route
+            path="/searchHp"
+            element={
+              <>
+                <Helmet>
+                  <title>아이사랑 - 병원찾기</title>
+                </Helmet>
+                <SearchHp />
               </>
             }
           ></Route>
