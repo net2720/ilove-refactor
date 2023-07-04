@@ -4,12 +4,13 @@ import { Helmet } from "react-helmet";
 import { Home } from "./pages/Index";
 import { Navigation } from "./components/Navigation";
 import { SearchBar } from "./components/SearchBar";
+import { Header } from "./components/Header";
 
 const App: React.FC = () => {
   return (
     <>
       <Container>
-        <SearchBar />
+        <Header />
         <Routes>
           <Route
             path="/"
