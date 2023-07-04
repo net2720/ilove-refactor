@@ -1,28 +1,31 @@
 import React, { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 interface BasicButtonProps {
-  //linkTo? : string;
-  small: boolean;
+  //linkTo?: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   children?: ReactNode;
 }
 
 export const BasicButton: React.FC<BasicButtonProps> = ({
   //linkTo,
-  small,
+  onClick,
   children,
 }) => {
   return (
     <>
-      <StyledButton small={small}>{children}</StyledButton>
+      <StyledButton onClick={onClick}>{children}</StyledButton>
     </>
   );
 };
 
 export const StyledButton = styled.button<BasicButtonProps>`
-  height: ${(props) => (props.small ? '40px' : '60px')};
-  background-color: #ffffff;
-  color: #66dd66;
-  width: 80px;
-  border: 1px solid #00ff00;
+  background-color: #2fb044;
+  color: #ffffff;
+  font-size: 20px;
+  margin: 2%;
+  width: 40px;
+  border: 1px solid #2fb044;
+  border-radius: 5px;
 `;

@@ -16,12 +16,13 @@ export const SmallCategories: React.FC<SmallCategoriesProps> = ({
 };
 
 export const SmallCategoriesStyle = styled.div`
-  position: relative;
-  margin: 2%;
-  width: 30px;
-  font-size: 20px;
-  border: 1px solid #999999;
-  background-color: #dddddd;
-  border-radius: 15px;
-  text-align: center;
+  font-weight: 400;
+  font-size: 16px;
+  padding: 7px 15px 7px 15px;
+  margin-left: 10px;
+  border: solid 1px #bebebe;
+  border-radius: 17.5px;
+  @media screen and (max-width: 640px) {
+    font-size: 13px;
+  }
 `;
