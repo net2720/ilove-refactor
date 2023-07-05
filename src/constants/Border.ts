@@ -1,9 +1,10 @@
 export const BorderRadius = {
-  inputRadius: "25px",
+  SearchRadius: "25px", // 병원검색 박스
   smallRadius: "15px",
+  inputRadius: "5px", // 단순 글자입력 박스
 };
 
 export const BorderColor = {
-  thinBorder: "0.5px solid rgb(128, 128, 128, 0.8)",
-  normalBorder: "1px solid rgb(128, 128, 128, 0.5)",
+  thinBorder: "1px solid #b6b6b6", // 회색 얇은 테두리
+  normalBorder: "1px solid #a9a9a9", // 회색 일반 테두리
 };

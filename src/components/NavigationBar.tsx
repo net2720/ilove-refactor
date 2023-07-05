@@ -5,11 +5,10 @@ import myInfo from "../assets/myInfo.svg";
 import { Link } from "react-router-dom";
 
 // 상수값 연결 링크
-import colors from "../constants/colors";
-
 import styled from "styled-components";
+import { colors } from "../constants/Colors";
 
-export const Navigation = () => {
+export const NavigationBar = () => {
   return (
     <>
       <Nav>
