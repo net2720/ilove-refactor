@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-export const fontSize = {
+export const FontSize = {
   h1: '30px',
   h2: '20px', // 버튼 글자크기
   h3: '18px', // 인풋태그 글자크기
@@ -8,4 +8,4 @@ export const fontSize = {
   but: '24px', // 회원가입,로그인 버튼
 };
 
-export default fontSize;
+export default FontSize;

@@ -31,8 +31,8 @@ import {
   SmallCategories,
 } from '../components/Index';
 
-import colors from '../constants/colors';
-import fontSize from '../constants/fontSize';
+import { Colors } from '../constants/Colors';
+import { FontSize } from '../constants/FontSize';
 
 interface NewHeaderProps {
   label: string;
@@ -44,7 +44,7 @@ interface ReviewButtonProps {
   clicked: string;
 }
 
-const HospitalInfo = () => {
+export const HospitalInfo = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -275,7 +275,7 @@ const UnderLine = styled.div`
   position: absolute;
   bottom: 0px;
   width: 100px;
-  border-bottom: 2px solid ${colors.primary};
+  border-bottom: 2px solid $ Colors.primary};
 `;
 
 const QueryMapBtn = styled.button`
@@ -284,7 +284,7 @@ const QueryMapBtn = styled.button`
   margin-top: 20px;
   width: 90%;
   height: 39px;
-  background-color: ${colors.primary};
+  background-color: $ Colors.primary};
   color: white;
   font-size: 16px;
   border: 1px solid #00a758;
@@ -321,7 +321,7 @@ const HpInfo = styled.div`
   }
   h1 {
     margin-left: 22px;
-    color: ${colors.primary};
+    color: $ Colors.primary};
   }
   @media screen and (max-width: 500px) {
     font-size: 15px;
@@ -360,7 +360,7 @@ const ReviewButton = styled.button<ReviewButtonProps>`
   cursor: pointer;
   background: ${({ clicked, label }) => {
     if (clicked === label) {
-      return colors.primary;
+      return Colors.primary;
     } else {
       return '#f4f4f4';
     }
@@ -415,5 +415,3 @@ const ReserveContainer = styled.div`
     }
   }
 `;
-
-export default HospitalInfo;

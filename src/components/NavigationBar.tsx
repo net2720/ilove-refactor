@@ -1,12 +1,12 @@
-import map from "../assets/map.svg";
-import miniLogo from "../assets/miniLogo.svg";
-import myInfo from "../assets/myInfo.svg";
+import map from '../assets/map.svg';
+import miniLogo from '../assets/miniLogo.svg';
+import myInfo from '../assets/myInfo.svg';
 
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 // 상수값 연결 링크
-import styled from "styled-components";
-import { colors } from "../constants/Colors";
+import styled from 'styled-components';
+import { Colors } from '../constants/Colors';
 
 export const NavigationBar = () => {
   return (
@@ -39,7 +39,7 @@ export const NavigationBar = () => {
 };
 const Nav = styled.div`
   width: 100%;
-  border-top: 1px solid ${colors.InputBorderOut};
+  border-top: 1px solid ${Colors.InputBorderOut};
   position: fixed;
   max-width: 834px;
   bottom: 0;
@@ -62,7 +62,7 @@ const NavLi = styled.li`
 `;
 
 const NavA = styled(Link)`
-  color: ${colors.fontColor};
+  color: ${Colors.fontColor};
 `;
 
 const NavImg = styled.img`

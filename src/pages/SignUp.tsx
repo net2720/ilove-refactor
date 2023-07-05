@@ -1,18 +1,18 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 // 이미지 링크
-import mainLogo from "../assets/mainLogo.svg";
+import mainLogo from '../assets/mainLogo.svg';
 
 // 공통 컴포넌트 연결 링크
 
-import { NavigationBar, Container } from "./Index";
+import { NavigationBar, Container } from './Index';
 
 // 상수로 뽑아둔 color, fontSize 연결 링크
-import { fontSize } from "../constants/fontSize";
-import { colors } from "../constants/Colors";
-import { JoinButton } from "../components/BasicButton";
-import { BorderRadius } from "../constants/Border";
+import { FontSize } from '../constants/FontSize';
+import { Colors } from '../constants/Colors';
+import { JoinButton } from '../components/BasicButton';
+import { BorderRadius } from '../constants/Border';
 
 // tab을 true/false로 하는 것 보다 하나의 state로 관리하는게 좀 더 가독성이 나을 것 같아서 리팩토링.
 export const SignUp = () => {
@@ -106,7 +106,7 @@ const SignUpFormDiv = styled.div`
   margin: 0 auto;
 `;
 const SignUpForm = styled.form`
-  border: 1px solid ${colors.InputBorderOut};
+  border: 1px solid ${Colors.InputBorderOut};
   border-radius: ${BorderRadius.inputRadius};
   padding: 10%;
   text-align: center;
@@ -118,8 +118,8 @@ const SignUpInput = styled.input`
   width: 90%;
   margin: 4% auto;
   border-radius: ${BorderRadius.inputRadius};
-  border: 1px solid ${colors.InputBorderOut};
-  font-size: ${fontSize.h3};
+  border: 1px solid ${Colors.InputBorderOut};
+  font-size: ${FontSize.h3};
 `;
 const SignUpBtn = styled.div`
   margin-top: 10%;
@@ -128,13 +128,13 @@ const SignUpBtn = styled.div`
 const SignUpInputDiv = styled.div``;
 
 const InputTitle = styled.p`
-  font-size: ${fontSize.h3};
+  font-size: ${FontSize.h3};
   text-align: left;
   padding-left: 5%;
 `;
 
 const P = styled.p`
-  font-size: ${fontSize.h3};
+  font-size: ${FontSize.h3};
   color: #c20000;
   margin-bottom: 3%;
 `;

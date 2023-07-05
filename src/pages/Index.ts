@@ -1,4 +1,17 @@
 import { Home } from './Home';
-import HospitalInfo from './HospitalInfo';
+import { SearchHp } from './SearchHp';
+import { HospitalInfo } from './HospitalInfo';
+import { Login } from './Login';
+import { Container } from '../components/Container';
+import { NavigationBar } from '../components/NavigationBar';
+import SignUp from './SignUp';
 
-export { Home, HospitalInfo };
+export {
+  Home,
+  SearchHp,
+  Login,
+  Container,
+  NavigationBar,
+  SignUp,
+  HospitalInfo,
+};
