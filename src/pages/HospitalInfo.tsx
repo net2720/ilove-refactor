@@ -31,8 +31,7 @@ import {
   SmallCategories,
 } from '../components/Index';
 
-import { Colors } from '../constants/Colors';
-import { FontSize } from '../constants/FontSize';
+import { Colors, FontSize } from '../constants/Index';
 
 interface NewHeaderProps {
   label: string;
