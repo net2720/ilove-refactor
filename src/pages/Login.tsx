@@ -1,14 +1,14 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // 이미지 링크
-import mainLogo from "../assets/mainLogo.svg";
-import { Container } from "../components/Container";
-import { JoinButton } from "../components/BasicButton";
-import { fontSize } from "../constants/fontSize";
-import { colors } from "../constants/Colors";
-import { BorderRadius, BorderColor } from "../constants/Border";
+import mainLogo from '../assets/mainLogo.svg';
+import { Container } from '../components/Container';
+import { JoinButton } from '../components/BasicButton';
+import { FontSize } from '../constants/FontSize';
+import { Colors } from '../constants/Colors';
+import { BorderRadius, BorderColor } from '../constants/Border';
 
-// 상수로 뽑아둔 color, fontSize 연결 링크
+// 상수로 뽑아둔 color, FontSize 연결 링크
 
 export const Login = () => {
   return (
@@ -56,10 +56,10 @@ const MainLogoImg = styled.img`
 `;
 
 const H1 = styled.p`
-  font-size: ${fontSize.h1};
+  font-size: ${FontSize.h1};
   margin: 0;
   padding: 2%;
-  color: ${colors.primary};
+  color: ${Colors.primary};
   font-weight: 700;
 `;
 
@@ -79,7 +79,7 @@ const LoginInput = styled.input`
   margin: 4% auto;
   border-radius: ${BorderRadius.inputRadius};
   border: ${BorderColor.thinBorder};
-  font-size: ${fontSize.h3};
+  font-size: ${FontSize.h3};
 `;
 const LoginBtn = styled.div`
   border-radius: ${BorderRadius.inputRadius};
@@ -97,13 +97,13 @@ const LoginUl = styled.div`
 
 const LoginLi = styled.div`
   // padding: 0.5%;
-  font-size: ${fontSize.h3};
-  color: ${colors.primary};
+  font-size: ${FontSize.h3};
+  color: ${Colors.primary};
   font-weight: 700;
 `;
 
 const LoginSeb = styled.div`
-  font-size: ${fontSize.h3};
+  font-size: ${FontSize.h3};
   color: #7d7d7d;
   margin-right: 1%;
 `;

@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import {
   Home,
   SearchHp,
@@ -7,7 +7,7 @@ import {
   Container,
   NavigationBar,
   SignUp,
-} from "./pages/Index";
+} from './pages/Index';
 
 const App: React.FC = () => {
   return (
