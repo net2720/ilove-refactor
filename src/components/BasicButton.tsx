@@ -1,10 +1,11 @@
 import React, { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { colors } from '../constants/Colors';
+import { fontSize } from '../constants/fontSize';
 
-interface BasicButtonProps {
-  //linkTo?: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+export interface BasicButtonProps {
+  //linkTo? : string;
+  small?: boolean;
   children?: ReactNode;
 }
 
@@ -21,11 +22,36 @@ export const BasicButton: React.FC<BasicButtonProps> = ({
 };
 
 export const StyledButton = styled.button<BasicButtonProps>`
-  background-color: #2fb044;
-  color: #ffffff;
-  font-size: 20px;
-  margin: 2%;
-  width: 40px;
-  border: 1px solid #2fb044;
-  border-radius: 5px;
+  padding: ${(props) => (props.small ? '2%' : '5%')};
+  background-color: ${colors.primary};
+  color: white;
+  width: 100%;
+  font-size: ${fontSize.h2};
+  border: 1px solid ${colors.primary};
+`;
+
+export const JoinButton = styled.button`
+  /* 일반 버튼 스타일 */
+  font-size: ${fontSize.but};
+  font-weight: 500;
+  color: white;
+  width: 100%;
+  border: 1px solid ${colors.primary};
+  border-bottom: none;
+  background-color: ${colors.primary};
+  cursor: pointer;
+  padding: 5%;
+
+  /* 활성 버튼 스타일 */
+  &.active {
+    font-size: ${fontSize.but};
+    font-weight: 500;
+    color: ${colors.InputBorderInFont};
+    width: 50%;
+    border: 1px solid ${colors.InputBorderOut};
+    border-bottom: none;
+    background-color: white;
+    cursor: pointer;
+    padding: 5%;
+  }
 `;

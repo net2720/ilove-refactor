@@ -1,10 +1,13 @@
-import { Container } from './components/Container';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { Home, HospitalInfo } from './pages/Index';
-import { Navigation } from './components/Navigation';
-import { SearchBar } from './components/SearchBar';
-import { SearchHp } from './pages/SearchHp';
+import {
+  Home,
+  SearchHp,
+  Login,
+  Container,
+  NavigationBar,
+  SignUp,
+} from './pages/Index';
 
 const App: React.FC = () => {
   return (
@@ -33,9 +36,30 @@ const App: React.FC = () => {
               </>
             }
           ></Route>
+          <Route
+            path="/login"
+            element={
+              <>
+                <Helmet>
+                  <title>아이사랑 - 로그인</title>
+                </Helmet>
+                <Login />
+              </>
+            }
+          ></Route>
+          <Route
+            path="/signUp"
+            element={
+              <>
+                <Helmet>
+                  <title>아이사랑 - 회원가입</title>
+                </Helmet>
+                <SignUp />
+              </>
+            }
+          ></Route>
         </Routes>
-
-        <Navigation />
+        <NavigationBar />
       </Container>
     </>
   );

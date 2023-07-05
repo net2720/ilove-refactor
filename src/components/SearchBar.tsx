@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { fontSize } from "../constants/fontSize";
 import { FiSearch } from "react-icons/fi";
 import React, { useState } from "react";
+import { BorderRadius } from "../constants/Border";
 
 export const SearchBar = () => {
   const [keyword, setKeyword] = useState("");
@@ -38,7 +39,7 @@ const SearchWrapper = styled.form`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 25px;
+  border-radius: ${BorderRadius.SearchRadius};
   border: 1px solid grey;
   margin: 0 auto;
   height: 50%;
@@ -47,7 +48,7 @@ const SearchWrapper = styled.form`
 const SearchInput = styled.input`
   width: 80%;
   padding: 1.5% 3.5%;
-  font-size: ${fontSize.h2};
+  font-size: ${fontSize.h3};
   border-style: none;
   background: none;
   outline: none;
