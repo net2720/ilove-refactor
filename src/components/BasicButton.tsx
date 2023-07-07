@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { Colors } from '../constants/Colors';
-import { FontSize } from '../constants/FontSize';
+import { Colors, FontSize, BorderRadius } from '../constants/Index';
 
 export interface BasicButtonProps {
   //linkTo? : string;
@@ -55,4 +54,13 @@ export const JoinButton = styled.button`
     cursor: pointer;
     padding: 5%;
   }
+`;
+
+export const SecessionButton = styled.button`
+  font-size: ${FontSize.h3};
+  color: ${Colors.InputBorderOut};
+  margin: 2%;
+  border: none;
+  border-radius: ${BorderRadius.inputRadius};
+  float: right;
 `;

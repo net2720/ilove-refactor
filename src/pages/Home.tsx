@@ -131,7 +131,7 @@ const MainBannerImg = () => {
 const H1 = styled.p`
   font-size: 28px;
   font-weight: 900;
-  color: #121212;
+  color: ${Colors.fontColor};
   padding: 1%;
   margin-bottom: 3%;
   width: 33.33%;
@@ -140,7 +140,7 @@ const H1 = styled.p`
 const H2 = styled.p`
   font-size: 16px;
   font-weight: 600;
-  color: #121212;
+  color: ${Colors.fontColor};
   padding: 1%;
   margin-bottom: 3%;
   width: 33.33%;
@@ -149,7 +149,7 @@ const H2 = styled.p`
 const H2Seb = styled.p`
   font-size: 16px;
   font-weight: 600;
-  color: #b2b2b2;
+  color: ${Colors.InputBorderOut};
   padding: 1%;
   margin-bottom: 3%;
   width: 33.33%;
@@ -158,7 +158,7 @@ const H2Seb = styled.p`
 const DistanceDiv = styled.div`
   font-size: 18px;
   font-weight: 600;
-  color: #121212;
+  color: ${Colors.fontColor};
   padding: 1%;
   margin-bottom: 3%;
   width: 33.33%;
@@ -186,7 +186,7 @@ const NewLogoImg = styled.img`
 
 const TopMenuBar = styled.div`
   margin-top: 5%;
-  width: 100%;
+  width: 95%;
   // border-bottom: solid 2px ${Colors.primary};
   display: flex;
 `;
@@ -322,7 +322,7 @@ const Guide = styled.p`
   font-size: 22px;
   font-weight: 700;
   margin: 10% 0 10% 0;
-  color: #b2b2b2;
+  color: ${Colors.InputBorderOut};
   // text-align: center;
 `;
 

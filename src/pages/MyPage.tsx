@@ -16,6 +16,8 @@ import axios from 'axios';
 import { Colors, FontSize } from '../constants/Index';
 import { CardBox, Container } from '../components/Index';
 
+import { SecessionButton } from '../components/BasicButton';
+
 export const MyPage = () => {
   const navigate = useNavigate();
   return (
@@ -51,6 +53,7 @@ export const MyPage = () => {
         <TagName>주소</TagName>
         <Info>부산광역시 동래구 충렬대로 좋은 곳</Info>
       </CardBox>
+      <SecessionButton>회원 탈퇴</SecessionButton>
     </>
   );
 };
@@ -82,11 +85,11 @@ const HeaderWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   & h2 {
-    font-size: 20px;
+    font-size: ${FontSize.h2};
     color: #00ad5c;
     font-weight: 600;
     @media screen and (max-width: 600px) {
-      font-size: 17px;
+      font-size: ${FontSize.h3};
     }
   }
 `;
