@@ -31,8 +31,7 @@ import {
   SmallCategories,
 } from '../components/Index';
 
-import { Colors } from '../constants/Colors';
-import { FontSize } from '../constants/FontSize';
+import { Colors, FontSize } from '../constants/Index';
 
 interface NewHeaderProps {
   label: string;
@@ -157,11 +156,11 @@ const HeaderWrap = styled.div`
   align-items: center;
   justify-content: space-between;
   & h2 {
-    font-size: 20px;
+    font-size: ${FontSize.h2};
     color: #00ad5c;
     font-weight: 600;
     @media screen and (max-width: 600px) {
-      font-size: 17px;
+      font-size: ${FontSize.h3};
     }
   }
 `;
@@ -243,9 +242,9 @@ const TopContentContainer = styled.div`
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 30px;
+  font-size: ${FontSize.h1};
   @media screen and (max-width: 600px) {
-    font-size: 20px;
+    font-size: ${FontSize.h2};
   }
   a {
     position: absolute;
@@ -286,7 +285,7 @@ const QueryMapBtn = styled.button`
   height: 39px;
   background-color: $ Colors.primary};
   color: white;
-  font-size: 16px;
+  font-size: ${FontSize.h3};
   border: 1px solid #00a758;
   border-radius: 7px;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
@@ -315,7 +314,7 @@ const HpInfo = styled.div`
   display: flex;
   align-items: center;
   font-weight: 600;
-  font-size: 18px;
+  font-size: ${FontSize.h3};
   span {
     margin-left: 22px;
   }

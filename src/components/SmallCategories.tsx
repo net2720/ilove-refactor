@@ -18,7 +18,8 @@ export const SmallCategories: React.FC<SmallCategoriesProps> = ({
 
 export const SmallCategoriesStyle = styled.div`
   margin: 2%;
-  width: 10%;
+  width: 100%;
+  padding: 2%;
   font-size: ${FontSize.h4};
   border: 1px solid #999999;
   background-color: #dddddd;
