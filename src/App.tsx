@@ -7,6 +7,8 @@ import {
   Container,
   NavigationBar,
   SignUp,
+  HospitalInfo,
+  MyPage,
 } from './pages/Index';
 
 const App: React.FC = () => {
@@ -22,6 +24,28 @@ const App: React.FC = () => {
                   <title>아이사랑</title>
                 </Helmet>
                 <Home />
+              </>
+            }
+          ></Route>
+          <Route
+            path="/myPage"
+            element={
+              <>
+                <Helmet>
+                  <title>아이사랑 - 내정보</title>
+                </Helmet>
+                <MyPage />
+              </>
+            }
+          ></Route>
+          <Route
+            path="/hospitalInfo"
+            element={
+              <>
+                <Helmet>
+                  <title>아이사랑 - 병원정보</title>
+                </Helmet>
+                <HospitalInfo />
               </>
             }
           ></Route>
