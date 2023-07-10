@@ -30,10 +30,6 @@ export const Login = () => {
 };
 export default Login;
 
-// const ErrorMessage = styled.p`
-//   color: #c20000;
-// `;
-
 const MainLogoDiv = styled.div`
   margin-top: 4%;
 `;
