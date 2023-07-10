@@ -1,37 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import {
   BrowserRouter as Router,
   Route,
   Link,
   useLocation,
   useNavigate,
-} from 'react-router-dom';
-import slider from 'react-slick';
-import { useQuery, useMutation } from 'react-query';
-import axios from 'axios';
+} from "react-router-dom";
+import slider from "react-slick";
+import { useQuery, useMutation } from "react-query";
+import axios from "axios";
 
-import star from '../assets/star.svg';
-import yellowStar from '../assets/yellowStar.svg';
-import locationWhite from '../assets/iconLocationWhite.svg';
-import locationGreen from '../assets/iconLocationGreen.svg';
-import arrowButtonRight from '../assets/arrowbutton.png';
-import arrowButtonLeft from '../assets/arrowbutton.png';
-import phoneGreen from '../assets/phoneGreen.svg';
-import clockGreen from '../assets/clockGreen.svg';
-import tagGreen from '../assets/tagGreen.svg';
-import smileGreen from '../assets/smileGreen.svg';
-import IconLeft from '../assets/iconLeft.svg';
-import NoImage from '../assets/NoImage.jpg';
+import star from "../assets/star.svg";
+import yellowStar from "../assets/yellowStar.svg";
+import locationWhite from "../assets/iconLocationWhite.svg";
+import locationGreen from "../assets/iconLocationGreen.svg";
+import arrowButtonRight from "../assets/arrowbutton.png";
+import arrowButtonLeft from "../assets/arrowbutton.png";
+import phoneGreen from "../assets/phoneGreen.svg";
+import clockGreen from "../assets/clockGreen.svg";
+import tagGreen from "../assets/tagGreen.svg";
+import smileGreen from "../assets/smileGreen.svg";
+import IconLeft from "../assets/iconLeft.svg";
+import NoImage from "../assets/NoImage.jpg";
 
 import {
   BasicButton,
   Container,
   SearchBar,
   SmallCategories,
-} from '../components/Index';
+} from "../components/Index";
 
-import { Colors, FontSize } from '../constants/Index';
+import { Colors, FontSize } from "../constants/Index";
 
 interface NewHeaderProps {
   label: string;
@@ -51,7 +51,7 @@ export const HospitalInfo = () => {
     return (
       <>
         <HeaderWrap>
-          <BtnBack onClick={() => navigate('/search')}>
+          <BtnBack onClick={() => navigate("/search")}>
             <img alt="icon-left" src={IconLeft}></img>
           </BtnBack>
           <HeaderName>
@@ -65,20 +65,20 @@ export const HospitalInfo = () => {
   return (
     <Container>
       <HeaderContainer>
-        <NewHeader label={'동래봉생병원'} />
+        <NewHeader label={"동래봉생병원"} />
       </HeaderContainer>
       <TopContentContainer>
-        <NameBox>{'동래봉생병원'}</NameBox>
+        <NameBox>{"동래봉생병원"}</NameBox>
         <UnderLine />
       </TopContentContainer>
       <BottomContentContainer>
         <HpInfo>
           <img alt="" src={locationGreen} />
-          <span>{'부산시 동래구 충렬대로'}</span>
+          <span>{"부산시 동래구 충렬대로"}</span>
         </HpInfo>
         <HpInfo>
           <img alt="" src={phoneGreen} />
-          <span>{'051-000-0000'}</span>
+          <span>{"051-000-0000"}</span>
         </HpInfo>
         <HpInfo>
           <img alt="" src={clockGreen} />
@@ -361,14 +361,14 @@ const ReviewButton = styled.button<ReviewButtonProps>`
     if (clicked === label) {
       return Colors.primary;
     } else {
-      return '#f4f4f4';
+      return "#f4f4f4";
     }
   }};
   color: ${({ clicked, label }) => {
     if (clicked === label) {
-      return 'white';
+      return "white";
     } else {
-      return '#333333';
+      return "#333333";
     }
   }};
   border: 1px solid #00ad5c;
@@ -383,9 +383,9 @@ const ReviewButton = styled.button<ReviewButtonProps>`
   span {
     color: ${({ clicked, label }) => {
       if (clicked === label) {
-        return 'white';
+        return "white";
       } else {
-        return '#333333';
+        return "#333333";
       }
     }};
     position: absolute;
