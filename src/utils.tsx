@@ -6,6 +6,7 @@ import { BorderRadius, BorderColor } from "./constants/Border";
 import { JoinButton } from "./components/BasicButton";
 import { Post } from "./pages/Post";
 import { instance } from "./services/Fetcher";
+import { useNavigate } from "react-router-dom";
 
 interface IFormInput {
   email: string;
@@ -16,6 +17,12 @@ interface IFormInput {
 }
 
 export const LoginValidated = () => {
+  const navigate = useNavigate();
+  const [loginData, setLoginData] = useState<IFormInput>({
+    email: "",
+    pw: "",
+  });
+
   const {
     register,
     handleSubmit,
@@ -27,10 +34,32 @@ export const LoginValidated = () => {
     },
     mode: "onChange",
   });
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    console.log(data);
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    try {
+      const response = await instance.post("users/login", {
+        email: data.email,
+        password: data.pw,
+      });
+      console.log(response);
+
+      const role = response.data.data.role;
+      const token = response.data.data.token;
+
+      console.log("role", role);
+      console.log("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("token", token);
+
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  const handleLogin = () => {
+    handleSubmit(onSubmit);
+  };
   return (
     <>
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
@@ -64,7 +93,7 @@ export const LoginValidated = () => {
         {errors?.pw ? <ErrorMessage>{errors.pw?.message}</ErrorMessage> : null}
 
         <LoginBtn>
-          <JoinButton>로그인</JoinButton>
+          <JoinButton onClick={handleLogin}>로그인</JoinButton>
         </LoginBtn>
       </LoginForm>
     </>
@@ -72,12 +101,13 @@ export const LoginValidated = () => {
 };
 
 export const SignUpValidated = () => {
+  const navigate = useNavigate();
   const [addr1, setAddr1] = useState<string>(""); // 시,도 주소
   const [addr2, setAddr2] = useState<string>(""); // 상세주소
   const [lat, setLat] = useState<number | null>(0); // 위도
   const [lng, setLng] = useState<number | null>(0); // 경도
   const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
-  const [userData, setUserData] = useState<IFormInput>({
+  const [registerData, setRegisterData] = useState<IFormInput>({
     email: "",
     pw: "",
     name: "",
@@ -101,7 +131,7 @@ export const SignUpValidated = () => {
     mode: "onChange",
   });
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    setUserData(data);
+    setRegisterData(data);
     if (data.pw !== data.checkPw) {
       setError(
         "checkPw",
@@ -125,18 +155,23 @@ export const SignUpValidated = () => {
     setFullAddress(fullAddress);
   };
 
-  const handleSignUp = () => {
-    console.log(addr1);
-    console.log(addr2);
-    console.log(lat);
-    console.log(lng);
-    console.log(userData);
-    instance.post("/users/clientsignup", {
-      email: userData.email,
-      name: userData.name,
-      phoneNumber: userData.phoneNumber,
-      password: userData.pw,
-    });
+  const handleSignUp = async () => {
+    try {
+      await instance.post("/users/clientsignup", {
+        email: registerData.email,
+        name: registerData.name,
+        phoneNumber: registerData.phoneNumber,
+        password: registerData.pw,
+        addr1: addr1,
+        addr2: addr2,
+        lat: lat,
+        lng: lng,
+      });
+
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

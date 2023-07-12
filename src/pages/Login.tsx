@@ -4,6 +4,7 @@ import { Container } from "../components/Container";
 import { FontSize } from "../constants/FontSize";
 import { Colors } from "../constants/Colors";
 import { LoginValidated } from "../utils";
+import { Link } from "react-router-dom";
 
 export const Login = () => {
   return (
@@ -21,7 +22,9 @@ export const Login = () => {
         <Div>
           <LoginUl>
             <LoginSeb>아직 아이사랑 회원이 아니신가요?</LoginSeb>
-            <LoginLi>회원가입 &gt; </LoginLi>
+            <Link to="/signup" style={{ textDecoration: "none" }}>
+              <LoginLi>회원가입 &gt; </LoginLi>
+            </Link>
           </LoginUl>
         </Div>
       </Container>
