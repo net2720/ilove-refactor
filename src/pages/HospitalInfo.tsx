@@ -1,57 +1,123 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import {
   BrowserRouter as Router,
   Route,
   Link,
   useLocation,
   useNavigate,
-} from "react-router-dom";
-import slider from "react-slick";
-import { useQuery, useMutation } from "react-query";
-import axios from "axios";
+} from 'react-router-dom';
+import slider from 'react-slick';
+import { useQuery, useMutation } from 'react-query';
+import axios from 'axios';
 
-import star from "../assets/star.svg";
-import yellowStar from "../assets/yellowStar.svg";
-import locationWhite from "../assets/iconLocationWhite.svg";
-import locationGreen from "../assets/iconLocationGreen.svg";
-import arrowButtonRight from "../assets/arrowbutton.png";
-import arrowButtonLeft from "../assets/arrowbutton.png";
-import phoneGreen from "../assets/phoneGreen.svg";
-import clockGreen from "../assets/clockGreen.svg";
-import tagGreen from "../assets/tagGreen.svg";
-import smileGreen from "../assets/smileGreen.svg";
-import IconLeft from "../assets/iconLeft.svg";
-import NoImage from "../assets/NoImage.jpg";
+import star from '../assets/star.svg';
+import yellowStar from '../assets/yellowStar.svg';
+import locationWhite from '../assets/iconLocationWhite.svg';
+import locationGreen from '../assets/iconLocationGreen.svg';
+import arrowButtonRight from '../assets/arrowbutton.png';
+import arrowButtonLeft from '../assets/arrowbutton.png';
+import phoneGreen from '../assets/phoneGreen.svg';
+import clockGreen from '../assets/clockGreen.svg';
+import tagGreen from '../assets/tagGreen.svg';
+import smileGreen from '../assets/smileGreen.svg';
+import IconLeft from '../assets/iconLeft.svg';
+import NoImage from '../assets/NoImage.jpg';
+import { instance } from '../services/Fetcher';
 
 import {
   BasicButton,
   Container,
   SearchBar,
   SmallCategories,
-} from "../components/Index";
+} from '../components/Index';
 
-import { Colors, FontSize } from "../constants/Index";
+import { Colors, FontSize } from '../constants/Index';
 
 interface NewHeaderProps {
-  label: string;
+  label: string | null | undefined;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 interface ReviewButtonProps {
   label: string;
-  clicked: string;
+  clicked: {};
 }
+
+interface HospitalDataProps {
+  dutyName: string | null;
+  dutyAddr: string | null;
+  dutyTel1: String | null;
+  dutyTime1c: string | null;
+  dutyTime1s: string | null;
+  dutyTime2c: string | null;
+  dutyTime2s: string | null;
+  dutyTime3c: string | null;
+  dutyTime3s: string | null;
+  dutyTime4c: string | null;
+  dutyTime4s: string | null;
+  dutyTime5c: string | null;
+  dutyTime5s: string | null;
+  dutyTime6c: string | null;
+  dutyTime6s: string | null;
+  dutyTime7c: string | null;
+  dutyTime7s: string | null;
+  dutyTime8c: string | null;
+  dutyTime8s: string | null;
+  dutyEtc: string | null;
+}
+
+type TimeProps = (time: string | null) => string | null;
 
 export const HospitalInfo = () => {
   const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const hospitalId = searchParams.get('id');
   const navigate = useNavigate();
+
+  const [hospitalData, setHospitalData] = useState<HospitalDataProps | null>(
+    null
+  );
+  const [hospitalReviews, setHospitalReviews] = useState([]);
+  const [hospitalReviewState, setHospitalReviewState] = useState({});
+  const [userReviews, setUserReviews] = useState([]);
+  const [likeState, setLikeState] = useState(false);
+
+  useEffect(() => {
+    const getHospitalDataAxios = async () => {
+      const response = await instance.get(`/hospital/${hospitalId}`);
+      const insultData = response.data.data;
+      console.log(insultData);
+      setHospitalData(insultData);
+    };
+    getHospitalDataAxios();
+  }, []);
+
+  useEffect(() => {
+    const getHospitalReviewAxios = async () => {
+      const response = await instance.get(`/reviews/${hospitalId}`);
+      const allReviews = response.data.data;
+      console.log(allReviews);
+      setHospitalReviews(allReviews);
+    };
+
+    getHospitalReviewAxios();
+  }, [hospitalReviewState]);
+
+  const formatTime: TimeProps = (time) => {
+    if (!time) {
+      return null;
+    }
+    const hours = time?.slice(0, 2);
+    const minutes = time?.slice(2);
+    return `${hours}:${minutes}`;
+  };
 
   const NewHeader: React.FC<NewHeaderProps> = ({ label, onClick }) => {
     return (
       <>
         <HeaderWrap>
-          <BtnBack onClick={() => navigate("/search")}>
+          <BtnBack onClick={() => navigate('/search')}>
             <img alt="icon-left" src={IconLeft}></img>
           </BtnBack>
           <HeaderName>
@@ -65,32 +131,82 @@ export const HospitalInfo = () => {
   return (
     <Container>
       <HeaderContainer>
-        <NewHeader label={"동래봉생병원"} />
+        <NewHeader label={hospitalData?.dutyName} />
       </HeaderContainer>
       <TopContentContainer>
-        <NameBox>{"동래봉생병원"}</NameBox>
+        <NameBox>{hospitalData?.dutyName}</NameBox>
         <UnderLine />
       </TopContentContainer>
       <BottomContentContainer>
         <HpInfo>
           <img alt="" src={locationGreen} />
-          <span>{"부산시 동래구 충렬대로"}</span>
+          <span>{hospitalData?.dutyAddr}</span>
         </HpInfo>
         <HpInfo>
           <img alt="" src={phoneGreen} />
-          <span>{"051-000-0000"}</span>
+          <span>{hospitalData?.dutyTel1}</span>
         </HpInfo>
         <HpInfo>
           <img alt="" src={clockGreen} />
           <HpInfoGrid>
-            <SmallCategories>월 09:00-18:00</SmallCategories>
-            <SmallCategories>화 09:00-18:00</SmallCategories>
+            {hospitalData?.dutyTime1c && hospitalData?.dutyTime1s && (
+              <SmallCategories>
+                월 {formatTime(hospitalData?.dutyTime1s)}-
+                {formatTime(hospitalData?.dutyTime1c)}
+              </SmallCategories>
+            )}
+            {hospitalData?.dutyTime2c && hospitalData?.dutyTime2s && (
+              <SmallCategories>
+                화 {formatTime(hospitalData?.dutyTime2s)}-
+                {formatTime(hospitalData?.dutyTime2c)}
+              </SmallCategories>
+            )}
+            {hospitalData?.dutyTime3c && hospitalData?.dutyTime3s && (
+              <SmallCategories>
+                수 {formatTime(hospitalData?.dutyTime3s)}-
+                {formatTime(hospitalData?.dutyTime3c)}
+              </SmallCategories>
+            )}
+            {hospitalData?.dutyTime4c && hospitalData?.dutyTime4s && (
+              <SmallCategories>
+                목 {formatTime(hospitalData?.dutyTime4s)}-
+                {formatTime(hospitalData?.dutyTime4c)}
+              </SmallCategories>
+            )}
+            {hospitalData?.dutyTime5c && hospitalData?.dutyTime5s && (
+              <SmallCategories>
+                금 {formatTime(hospitalData?.dutyTime5s)}-
+                {formatTime(hospitalData?.dutyTime5c)}
+              </SmallCategories>
+            )}
+            {hospitalData?.dutyTime6c && hospitalData?.dutyTime6s && (
+              <SmallCategories>
+                토 {formatTime(hospitalData?.dutyTime6s)}-
+                {formatTime(hospitalData?.dutyTime6c)}
+              </SmallCategories>
+            )}
+            {hospitalData?.dutyTime7c && hospitalData?.dutyTime7s && (
+              <SmallCategories>
+                일 {formatTime(hospitalData?.dutyTime7s)}-
+                {formatTime(hospitalData?.dutyTime7c)}
+              </SmallCategories>
+            )}
+            {hospitalData?.dutyTime8c && hospitalData?.dutyTime8s && (
+              <SmallCategories>
+                공휴일 {formatTime(hospitalData?.dutyTime8s)}-
+                {formatTime(hospitalData?.dutyTime8c)}
+              </SmallCategories>
+            )}
           </HpInfoGrid>
         </HpInfo>
         <HpInfo>
           <img alt="" src={tagGreen} />
           <HpInfoGrid>
-            <SmallCategories>태그가 없습니다</SmallCategories>
+            {hospitalData?.dutyEtc ? (
+              <SmallCategories>{hospitalData?.dutyEtc}</SmallCategories>
+            ) : (
+              <SmallCategories>태그가 없습니다</SmallCategories>
+            )}
           </HpInfoGrid>
         </HpInfo>
         <HpInfo>
@@ -98,29 +214,41 @@ export const HospitalInfo = () => {
           <h1>이런 점이 좋았어요</h1>
         </HpInfo>
         <ReviewContainer>
-          <ReviewButton clicked="kindDoctor" label="kindDoctor">
+          <ReviewButton clicked={hospitalReviewState} label="kindDoctor">
             친절한 의사 선생님
-            <span>2100</span>
+            {hospitalReviews && (
+              <span>{JSON.stringify(hospitalReviews[0])}</span>
+            )}
           </ReviewButton>
-          <ReviewButton clicked="kindDoctor" label="professional">
+          <ReviewButton clicked={hospitalReviewState} label="professional">
             전문적인 치료
-            <span>15</span>
+            {hospitalReviews && (
+              <span>{JSON.stringify(hospitalReviews[1])}</span>
+            )}
           </ReviewButton>
-          <ReviewButton clicked="kindDoctor" label="kindEmployee">
+          <ReviewButton clicked={hospitalReviewState} label="kindEmployee">
             상냥한 간호사·직원
-            <span>150</span>
+            {hospitalReviews && (
+              <span>{JSON.stringify(hospitalReviews[2])}</span>
+            )}
           </ReviewButton>
-          <ReviewButton clicked="kindDoctor" label="goodReceipt">
+          <ReviewButton clicked={hospitalReviewState} label="goodReceipt">
             편리한 접수·예약
-            <span>12</span>
+            {hospitalReviews && (
+              <span>{JSON.stringify(hospitalReviews[3])}</span>
+            )}
           </ReviewButton>
-          <ReviewButton clicked="kindDoctor" label="cleanHospital">
+          <ReviewButton clicked={hospitalReviewState} label="cleanHospital">
             깨끗한 시설
-            <span>960</span>
+            {hospitalReviews && (
+              <span>{JSON.stringify(hospitalReviews[4])}</span>
+            )}
           </ReviewButton>
-          <ReviewButton clicked="kindDoctor" label="goodTraffic">
+          <ReviewButton clicked={hospitalReviewState} label="goodTraffic">
             편한 교통·주차
-            <span>1</span>
+            {hospitalReviews && (
+              <span>{JSON.stringify(hospitalReviews[5])}</span>
+            )}
           </ReviewButton>
         </ReviewContainer>
       </BottomContentContainer>
@@ -361,14 +489,14 @@ const ReviewButton = styled.button<ReviewButtonProps>`
     if (clicked === label) {
       return Colors.primary;
     } else {
-      return "#f4f4f4";
+      return '#f4f4f4';
     }
   }};
   color: ${({ clicked, label }) => {
     if (clicked === label) {
-      return "white";
+      return 'white';
     } else {
-      return "#333333";
+      return '#333333';
     }
   }};
   border: 1px solid #00ad5c;
@@ -383,9 +511,9 @@ const ReviewButton = styled.button<ReviewButtonProps>`
   span {
     color: ${({ clicked, label }) => {
       if (clicked === label) {
-        return "white";
+        return 'white';
       } else {
-        return "#333333";
+        return '#333333';
       }
     }};
     position: absolute;
