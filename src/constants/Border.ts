@@ -2,6 +2,7 @@ export const BorderRadius = {
   SearchRadius: "25px", // 병원검색 박스
   smallRadius: "15px",
   inputRadius: "5px", // 단순 글자입력 박스
+  modalRadius: "10px", // 모달창
 };
 
 export const BorderColor = {
