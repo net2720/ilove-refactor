@@ -5,6 +5,7 @@ import { FontSize } from "./constants/FontSize";
 import { BorderRadius, BorderColor } from "./constants/Border";
 import { JoinButton } from "./components/BasicButton";
 import { Post } from "./pages/Post";
+import { instance } from "./services/Fetcher";
 
 interface IFormInput {
   email: string;
@@ -71,6 +72,19 @@ export const LoginValidated = () => {
 };
 
 export const SignUpValidated = () => {
+  const [addr1, setAddr1] = useState<string>(""); // 시,도 주소
+  const [addr2, setAddr2] = useState<string>(""); // 상세주소
+  const [lat, setLat] = useState<number | null>(0); // 위도
+  const [lng, setLng] = useState<number | null>(0); // 경도
+  const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
+  const [userData, setUserData] = useState<IFormInput>({
+    email: "",
+    pw: "",
+    name: "",
+    phoneNumber: "",
+    checkPw: "",
+  });
+
   const {
     register,
     handleSubmit,
@@ -87,7 +101,7 @@ export const SignUpValidated = () => {
     mode: "onChange",
   });
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    console.log(data);
+    setUserData(data);
     if (data.pw !== data.checkPw) {
       setError(
         "checkPw",
@@ -95,21 +109,34 @@ export const SignUpValidated = () => {
         { shouldFocus: true }
       );
     }
-    console.log(errors);
   };
 
-  const [addr1, setAddr1] = useState<string>(""); // 시,도 주소
-  const [addr2, setAddr2] = useState<string>(""); // 상세주소
-  const [lat, setLat] = useState<number>(0); // 위도
-  const [lng, setLng] = useState<number>(0); // 경도
-  const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
-
-  const getAddrData = (): void => {
+  const getAddrData = (
+    addr1: string,
+    addr2: string,
+    lat: number | null,
+    lng: number | null,
+    fullAddress: string
+  ): void => {
     setAddr1(addr1);
     setAddr2(addr2);
     setLat(lat);
     setLng(lng);
     setFullAddress(fullAddress);
+  };
+
+  const handleSignUp = () => {
+    console.log(addr1);
+    console.log(addr2);
+    console.log(lat);
+    console.log(lng);
+    console.log(userData);
+    instance.post("/users/clientsignup", {
+      email: userData.email,
+      name: userData.name,
+      phoneNumber: userData.phoneNumber,
+      password: userData.pw,
+    });
   };
 
   return (
@@ -188,7 +215,7 @@ export const SignUpValidated = () => {
 
         <Post getAddrData={getAddrData} />
         <LoginBtn>
-          <JoinButton>회원가입</JoinButton>
+          <JoinButton onClick={handleSignUp}>회원가입</JoinButton>
         </LoginBtn>
       </LoginForm>
     </>

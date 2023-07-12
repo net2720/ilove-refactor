@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import DaumPostCode from "react-daum-postcode";
 import styled from "styled-components";
-import { Colors } from "../constants/Colors";
 import axios from "axios";
 import { BasicButton } from "../components/BasicButton";
 import { LoginInput, InputTitle } from "../utils";
+import { BorderRadius } from "../constants/Border";
 
 interface Latlng {
   lat: number | null;
@@ -23,7 +23,6 @@ type addrProps = {
 
 export const Post = ({ getAddrData }: addrProps) => {
   const [isOpen, setIsOpen] = useState(false); //모달 상태
-  const [fulladdress, setFulladdress] = useState(""); // 전체주소
   const [dutyAddr1Depth, setDutyAddr1Depth] = useState(""); // 시,도 주소
   const [dutyAddr2Depth, setDutyAddr2Depth] = useState(""); // 상세주소
 
@@ -70,21 +69,21 @@ export const Post = ({ getAddrData }: addrProps) => {
           return { lat: null, lng: null };
         }
       } catch (error) {
-        console.error(error);
         return { lat: null, lng: null };
       }
     };
     const { lat, lng }: Latlng = await convertAddressToCoordinates();
 
-    console.log(lat, lng);
-
     const newAddress = data.address.split(" "); // 검색한 주소를 배열로 전환
     const dutyAddr1Depth = newAddress.splice(0, 2).join(" "); // 시,도 주소를 뽑아내기 위해서 인덱스 번호로 자름
     const dutyAddr2Depth = [...newAddress].join(" "); // 시,도 주소를 제외한 나머지 주소를 상세주소 변수에 추가
 
+    const addr1 = dutyAddr1Depth;
+    const addr2 = dutyAddr2Depth;
+
     setDutyAddr2Depth(dutyAddr2Depth); // 시,도 주소 변수 값으로 State변화
     setDutyAddr1Depth(dutyAddr1Depth); // 상세주소 변수 값으로 State변화
-    getAddrData(dutyAddr1Depth, dutyAddr2Depth, lat, lng, fullAddress); // 레지스터폼에서 props로 내려온 getAddrData 함수에 2가지 종류의 주소 데이터를 보냄
+    getAddrData(addr1, addr2, lat, lng, fullAddress); // 레지스터폼에서 props로 내려온 getAddrData 함수에 2가지 종류의 주소 데이터를 보냄
 
     handleCloseModal(); // 주소 선택 시 모달 닫음
   };
@@ -137,11 +136,11 @@ export const ModalContainer = styled.div`
 `;
 
 export const Modal = styled.div`
-  width: 100%;
+  width: 30%;
   height: auto;
   padding: 20px;
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: ${BorderRadius.modalRadius};
 `;
 
 export const InputBox = styled.div`
