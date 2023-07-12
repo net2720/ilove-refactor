@@ -52,14 +52,33 @@ interface SearchBarProps {
 }
 
 export const Home = () => {
+  const token = localStorage.getItem('token');
   let showTab = '';
   let hideTab = 'none';
+  if (token) {
+    showTab = 'none';
+    hideTab = '';
+  } else {
+    showTab = '';
+    hideTab = 'none';
+  }
   const navigate = useNavigate();
 
   const [search, setSearch] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    const role = localStorage.getItem('role');
+
+    if (token && role) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      toast('로그아웃 성공');
+    } else {
+      toast('오류로 인해 로그아웃 하지 못했습니다.');
+    }
+    navigate('/');
+  };
 
   return (
     <>
@@ -79,7 +98,9 @@ export const Home = () => {
           <FlexGrow></FlexGrow>
 
           <MenuSeb>
-            <SebP style={{ display: showTab }}>로그인</SebP>
+            <Link to="/login">
+              <SebP style={{ display: showTab }}>로그인</SebP>
+            </Link>
           </MenuSeb>
 
           <MenuSeb>
@@ -89,7 +110,9 @@ export const Home = () => {
           </MenuSeb>
 
           <MenuSeb>
-            <SebP style={{ display: showTab }}>회원가입</SebP>
+            <Link to="/signUp">
+              <SebP style={{ display: showTab }}>회원가입</SebP>
+            </Link>
           </MenuSeb>
         </TopMenuBar>
 

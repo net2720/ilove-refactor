@@ -1,36 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
-import slider from 'react-slick';
-import { useQuery, useMutation } from 'react-query';
-import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import star from '../assets/star.svg';
-import yellowStar from '../assets/yellowStar.svg';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify';
+
 import locationWhite from '../assets/iconLocationWhite.svg';
 import locationGreen from '../assets/iconLocationGreen.svg';
-import arrowButtonRight from '../assets/arrowbutton.png';
-import arrowButtonLeft from '../assets/arrowbutton.png';
 import phoneGreen from '../assets/phoneGreen.svg';
 import clockGreen from '../assets/clockGreen.svg';
 import tagGreen from '../assets/tagGreen.svg';
 import smileGreen from '../assets/smileGreen.svg';
 import IconLeft from '../assets/iconLeft.svg';
-import NoImage from '../assets/NoImage.jpg';
 import { instance } from '../services/Fetcher';
 
-import {
-  BasicButton,
-  Container,
-  SearchBar,
-  SmallCategories,
-} from '../components/Index';
+import { Container, SmallCategories } from '../components/Index';
 
 import { Colors, FontSize } from '../constants/Index';
 
@@ -40,6 +24,7 @@ interface NewHeaderProps {
 }
 
 interface ReviewButtonProps {
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   label: string;
   clicked: {};
 }
@@ -73,36 +58,64 @@ export const HospitalInfo = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const hospitalId = searchParams.get('id');
+  const token = localStorage.getItem('token')
+    ? localStorage.getItem('token')
+    : false;
   const navigate = useNavigate();
 
   const [hospitalData, setHospitalData] = useState<HospitalDataProps | null>(
     null
   );
   const [hospitalReviews, setHospitalReviews] = useState([]);
-  const [hospitalReviewState, setHospitalReviewState] = useState({});
   const [userReviews, setUserReviews] = useState([]);
-  const [likeState, setLikeState] = useState(false);
 
   useEffect(() => {
     const getHospitalDataAxios = async () => {
       const response = await instance.get(`/hospital/${hospitalId}`);
       const insultData = response.data.data;
-      console.log(insultData);
       setHospitalData(insultData);
     };
+
+    if (token) {
+      const isUserReviewedThisHospital = async () => {
+        const response = await instance.get(`/reviews/user/${hospitalId}`);
+        const userVote = response.data.data;
+        if (userVote.length !== 0) {
+          setUserReviews(userVote[0].vote);
+        }
+      };
+      isUserReviewedThisHospital();
+    }
+
     getHospitalDataAxios();
-  }, []);
+  }, [token, hospitalId]);
 
   useEffect(() => {
     const getHospitalReviewAxios = async () => {
       const response = await instance.get(`/reviews/${hospitalId}`);
       const allReviews = response.data.data;
-      console.log(allReviews);
       setHospitalReviews(allReviews);
     };
-
     getHospitalReviewAxios();
-  }, [hospitalReviewState]);
+  }, [userReviews, hospitalId]);
+
+  const reviewClick = async (label: string) => {
+    if (token) {
+      const data = { vote: label };
+      const response = await instance.post(`/reviews/${hospitalId}`, {
+        vote: data.vote,
+      });
+      const isNotEmptyArray = response.data.data;
+      if (isNotEmptyArray.length !== 0) {
+        const isUserVoted = isNotEmptyArray[0].vote;
+        setUserReviews(isUserVoted);
+      } else {
+        setUserReviews([]);
+      }
+    } else {
+      toast('로그인을 진행해 주세요');
+    }
+  };
 
   const formatTime: TimeProps = (time) => {
     if (!time) {
@@ -130,6 +143,13 @@ export const HospitalInfo = () => {
 
   return (
     <Container>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        closeButton={false}
+        autoClose={4000}
+        hideProgressBar
+      />
       <HeaderContainer>
         <NewHeader label={hospitalData?.dutyName} />
       </HeaderContainer>
@@ -214,37 +234,61 @@ export const HospitalInfo = () => {
           <h1>이런 점이 좋았어요</h1>
         </HpInfo>
         <ReviewContainer>
-          <ReviewButton clicked={hospitalReviewState} label="kindDoctor">
+          <ReviewButton
+            onClick={() => reviewClick('kindDoctor')}
+            clicked={userReviews}
+            label="kindDoctor"
+          >
             친절한 의사 선생님
             {hospitalReviews && (
               <span>{JSON.stringify(hospitalReviews[0])}</span>
             )}
           </ReviewButton>
-          <ReviewButton clicked={hospitalReviewState} label="professional">
+          <ReviewButton
+            onClick={() => reviewClick('professional')}
+            clicked={userReviews}
+            label="professional"
+          >
             전문적인 치료
             {hospitalReviews && (
               <span>{JSON.stringify(hospitalReviews[1])}</span>
             )}
           </ReviewButton>
-          <ReviewButton clicked={hospitalReviewState} label="kindEmployee">
+          <ReviewButton
+            onClick={() => reviewClick('kindEmployee')}
+            clicked={userReviews}
+            label="kindEmployee"
+          >
             상냥한 간호사·직원
             {hospitalReviews && (
               <span>{JSON.stringify(hospitalReviews[2])}</span>
             )}
           </ReviewButton>
-          <ReviewButton clicked={hospitalReviewState} label="goodReceipt">
+          <ReviewButton
+            onClick={() => reviewClick('goodReceipt')}
+            clicked={userReviews}
+            label="goodReceipt"
+          >
             편리한 접수·예약
             {hospitalReviews && (
               <span>{JSON.stringify(hospitalReviews[3])}</span>
             )}
           </ReviewButton>
-          <ReviewButton clicked={hospitalReviewState} label="cleanHospital">
+          <ReviewButton
+            onClick={() => reviewClick('cleanHospital')}
+            clicked={userReviews}
+            label="cleanHospital"
+          >
             깨끗한 시설
             {hospitalReviews && (
               <span>{JSON.stringify(hospitalReviews[4])}</span>
             )}
           </ReviewButton>
-          <ReviewButton clicked={hospitalReviewState} label="goodTraffic">
+          <ReviewButton
+            onClick={() => reviewClick('goodTraffic')}
+            clicked={userReviews}
+            label="goodTraffic"
+          >
             편한 교통·주차
             {hospitalReviews && (
               <span>{JSON.stringify(hospitalReviews[5])}</span>
@@ -264,19 +308,6 @@ const HeaderContainer = styled.div`
   border-bottom: 1px solid #b2b2b2;
 `;
 
-const HeaderStar = styled.div`
-  cursor: pointer;
-  display: flex;
-  text-align: center;
-  float: right;
-  width: 29px;
-  height: 28px;
-  margin-right: 10px;
-  @media screen and (max-width: 600px) {
-    width: 21px;
-    height: 21px;
-  }
-`;
 const HeaderWrap = styled.div`
   width: 100%;
   display: flex;
@@ -335,29 +366,6 @@ const FixedImg = styled.div`
     height: 350px;
     border-radius: 20px;
     object-fit: cover;
-  }
-`;
-
-const ArrowRigth = styled.div`
-  display: none;
-  position: absolute;
-  right: 72px;
-  transform: rotate(180deg);
-  cursor: pointer;
-  img {
-    width: 50px;
-    height: 50px;
-  }
-`;
-
-const ArrowLeft = styled.div`
-  display: none;
-  position: absolute;
-  left: 72px;
-  cursor: pointer;
-  img {
-    width: 50px;
-    height: 50px;
   }
 `;
 
@@ -525,20 +533,5 @@ const ReviewButton = styled.button<ReviewButtonProps>`
   }
   &:hover {
     opacity: 50%;
-  }
-`;
-
-const ReserveContainer = styled.div`
-  margin: 60px 0 41px 0;
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  button {
-    border: 1px solid #00a758;
-    border-radius: 11px;
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
-    &:hover {
-      opacity: 70%;
-    }
   }
 `;
