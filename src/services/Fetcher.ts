@@ -5,8 +5,7 @@ const token = () => {
 };
 
 export const instance = axios.create({
-  baseURL: 'http://localhost:5000/api',
-  /*localhost/125.188.246.81*/
+  baseURL: 'http://125.188.246.81:5000/api',
 });
 
 instance.interceptors.request.use(
