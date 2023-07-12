@@ -5,7 +5,7 @@ const token = () => {
 };
 
 export const instance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://192.168.219.200:5000/api',
   //http://125.188.246.81:5000/api
 });
 
