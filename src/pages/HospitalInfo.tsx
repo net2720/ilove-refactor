@@ -80,7 +80,6 @@ export const HospitalInfo = () => {
       const isUserReviewedThisHospital = async () => {
         const response = await instance.get(`/reviews/user/${hospitalId}`);
         const userVote = response.data.data;
-        console.log(userVote);
         if (userVote.length !== 0) {
           setUserReviews(userVote[0].vote);
         }
