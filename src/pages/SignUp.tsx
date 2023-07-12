@@ -9,7 +9,7 @@ import mainLogo from "../assets/mainLogo.svg";
 import { NavigationBar, Container } from "./Index";
 
 // 상수로 뽑아둔 color, fontSize 연결 링크
-import { FontSize } from "../constants/FontSize";
+
 import { SignUpValidated } from "../utils";
 
 // tab을 true/false로 하는 것 보다 하나의 state로 관리하는게 좀 더 가독성이 나을 것 같아서 리팩토링.

@@ -1,9 +1,10 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FontSize } from "./constants/FontSize";
 import { BorderRadius, BorderColor } from "./constants/Border";
 import { JoinButton } from "./components/BasicButton";
+import { Post } from "./pages/Post";
 
 interface IFormInput {
   email: string;
@@ -97,6 +98,20 @@ export const SignUpValidated = () => {
     console.log(errors);
   };
 
+  const [addr1, setAddr1] = useState<string>(""); // 시,도 주소
+  const [addr2, setAddr2] = useState<string>(""); // 상세주소
+  const [lat, setLat] = useState<number>(0); // 위도
+  const [lng, setLng] = useState<number>(0); // 경도
+  const [fullAddress, setFullAddress] = useState<string>(""); //전체주소
+
+  const getAddrData = (): void => {
+    setAddr1(addr1);
+    setAddr2(addr2);
+    setLat(lat);
+    setLng(lng);
+    setFullAddress(fullAddress);
+  };
+
   return (
     <>
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
@@ -171,6 +186,7 @@ export const SignUpValidated = () => {
           <ErrorMessage>{errors.checkPw?.message}</ErrorMessage>
         ) : null}
 
+        <Post getAddrData={getAddrData} />
         <LoginBtn>
           <JoinButton>회원가입</JoinButton>
         </LoginBtn>
@@ -187,13 +203,13 @@ const LoginForm = styled.form`
   box-shadow: 0px 4px 5px 0px rgba(0, 0, 0, 0.1);
 `;
 
-const InputTitle = styled.p`
+export const InputTitle = styled.p`
   font-size: ${FontSize.h3};
   text-align: left;
   padding-left: 3%;
 `;
 
-const LoginInput = styled.input.attrs((props) => ({
+export const LoginInput = styled.input.attrs((props) => ({
   placeholder: props.placeholder,
 }))`
   padding: 4%;
