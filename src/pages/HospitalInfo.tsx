@@ -336,7 +336,7 @@ const BtnBack = styled.button`
 `;
 
 //스타일 - 메인컨텐츠
-const SlideContainer = styled.div`
+/*const SlideContainer = styled.div`
   margin-top: 25px;
   display: flex;
   align-items: center;
@@ -367,7 +367,7 @@ const FixedImg = styled.div`
     border-radius: 20px;
     object-fit: cover;
   }
-`;
+`;*/
 
 const TopContentContainer = styled.div`
   position: relative;

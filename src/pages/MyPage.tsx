@@ -1,12 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import IconLeft from '../assets/iconLeft.svg';
 import PinWheel from '../assets/Pinwheel.gif';
@@ -16,12 +10,31 @@ import axios from 'axios';
 import { Colors, FontSize } from '../constants/Index';
 import { CardBox, Container } from '../components/Index';
 
-import { SecessionButton } from '../components/BasicButton';
+import { BasicButton, DeleteButton } from '../components/Index';
+import { instance } from '../services/Fetcher';
 
 export const MyPage = () => {
+  const token = localStorage.getItem('token');
+
+  const [nameState, setNameState] = useState('');
+  const [contectState, setContectState] = useState('');
+  const [addressState, setAddressState] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const response = await instance.get('/users/get');
+      const userData = response.data.data[0];
+      console.log(userData);
+      setNameState(userData.name);
+      setContectState(userData.phoneNumber);
+      setAddressState(userData.address);
+    };
+    fetchUserData();
+  }, [token]);
+
   const navigate = useNavigate();
   return (
-    <>
+    <Container>
       <HeaderWrap>
         <BtnBack onClick={() => navigate('/')}>
           <img alt="icon-left" src={IconLeft}></img>
@@ -39,7 +52,7 @@ export const MyPage = () => {
       </CardBox>
       <CardBox>
         <TagName>이름</TagName>
-        <Info>노은탁</Info>
+        <Info>{nameState}</Info>
       </CardBox>
       <CardBox>
         <TagName>이메일</TagName>
@@ -47,14 +60,18 @@ export const MyPage = () => {
       </CardBox>
       <CardBox>
         <TagName>연락처</TagName>
-        <Info>010-5490-4147</Info>
+        <Info>{contectState}</Info>
       </CardBox>
       <CardBox>
         <TagName>주소</TagName>
-        <Info>부산광역시 동래구 충렬대로 좋은 곳</Info>
+        <Info>{addressState}</Info>
       </CardBox>
-      <SecessionButton>회원 탈퇴</SecessionButton>
-    </>
+      <ButtonGridBox>
+        <BasicButton>정보 수정</BasicButton>
+        <BasicButton>비밀 번호 변경</BasicButton>
+        <DeleteButton>회원 탈퇴</DeleteButton>
+      </ButtonGridBox>
+    </Container>
   );
 };
 
@@ -108,4 +125,19 @@ const InfoImgWarp = styled.div`
 
 const InfoImg = styled.div`
   width: 100%;
+`;
+
+const ButtonGridBox = styled.div`
+  padding-top: 2%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 10px;
+  @media screen and (max-width: 800px) {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 10px;
+  }
+  @media screen and (max-width: 450px) {
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+  }
 `;

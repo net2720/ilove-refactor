@@ -74,6 +74,5 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
     "prettier": "^2.8.8"
-  },
-  "proxy": "http://125.188.246.81:5000/api"
+  }
 }

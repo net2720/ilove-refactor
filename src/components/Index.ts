@@ -1,4 +1,4 @@
-import { BasicButton } from './BasicButton';
+import { BasicButton, DeleteButton } from './BasicButton';
 import { CardBox } from './CardBox';
 import { Container } from './Container';
 import { SearchBar } from './SearchBar';
@@ -8,6 +8,7 @@ import { Header } from './Header';
 
 export {
   BasicButton,
+  DeleteButton,
   CardBox,
   Container,
   SearchBar,

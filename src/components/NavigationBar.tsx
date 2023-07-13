@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { Colors } from '../constants/Colors';
 
 export const NavigationBar = () => {
+  const token = localStorage.getItem('token');
   return (
     <>
       <Nav>
@@ -27,10 +28,17 @@ export const NavigationBar = () => {
           </NavLi>
 
           <NavLi>
-            <NavA to="/">
-              <NavImg src={myInfo} alt="star"></NavImg>
-              <NavP>내정보</NavP>
-            </NavA>
+            {token ? (
+              <NavA to="/myPage">
+                <NavImg src={myInfo} alt="star"></NavImg>
+                <NavP>내정보</NavP>
+              </NavA>
+            ) : (
+              <NavA to="/login">
+                <NavImg src={myInfo} alt="star"></NavImg>
+                <NavP>내정보</NavP>
+              </NavA>
+            )}
           </NavLi>
         </NavUl>
       </Nav>
