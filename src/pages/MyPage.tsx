@@ -18,8 +18,8 @@ export const MyPage = () => {
 
   const [nameState, setNameState] = useState('');
   const [contectState, setContectState] = useState('');
-  const [addressState, setAddressState] = useState('');
-
+  const [addr1State, setAddr1State] = useState('');
+  const [addr2State, setAddr2State] = useState('');
   useEffect(() => {
     const fetchUserData = async () => {
       const response = await instance.get('/users/get');
@@ -27,7 +27,8 @@ export const MyPage = () => {
       console.log(userData);
       setNameState(userData.name);
       setContectState(userData.phoneNumber);
-      setAddressState(userData.address);
+      setAddr1State(userData.addr1);
+      setAddr2State(userData.addr2);
     };
     fetchUserData();
   }, [token]);
@@ -64,7 +65,9 @@ export const MyPage = () => {
       </CardBox>
       <CardBox>
         <TagName>주소</TagName>
-        <Info>{addressState}</Info>
+        <Info>
+          {addr1State} {addr2State}
+        </Info>
       </CardBox>
       <ButtonGridBox>
         <BasicButton>정보 수정</BasicButton>
