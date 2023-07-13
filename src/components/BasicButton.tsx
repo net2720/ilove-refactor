@@ -6,7 +6,7 @@ export interface BasicButtonProps {
   //linkTo? : string;
   small?: boolean;
   children?: ReactNode;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 export const BasicButton: React.FC<BasicButtonProps> = ({
@@ -21,6 +21,17 @@ export const BasicButton: React.FC<BasicButtonProps> = ({
   );
 };
 
+export const DeleteButton: React.FC<BasicButtonProps> = ({
+  onClick,
+  children,
+}) => {
+  return (
+    <>
+      <StyledDeleteButton onClick={onClick}>{children}</StyledDeleteButton>
+    </>
+  );
+};
+
 export const StyledButton = styled.button<BasicButtonProps>`
   padding: ${(props) => (props.small ? '2%' : '5%')};
   background-color: ${Colors.primary};
@@ -30,7 +41,7 @@ export const StyledButton = styled.button<BasicButtonProps>`
   border: 1px solid ${Colors.primary};
 `;
 
-export const DeleteButton = styled.button<BasicButtonProps>`
+export const StyledDeleteButton = styled.button<BasicButtonProps>`
   padding: ${(props) => (props.small ? '2%' : '5%')};
   background-color: ${Colors.InputBorderInFont};
   color: #666666;

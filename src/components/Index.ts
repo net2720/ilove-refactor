@@ -5,6 +5,8 @@ import { SearchBar } from './SearchBar';
 import { SmallCategories } from './SmallCategories';
 import { NavigationBar } from './NavigationBar';
 import { Header } from './Header';
+import { Modal } from './Modal';
+import { ChangePWModal, DeleteUserModal } from './MyPageModal';
 
 export {
   BasicButton,
@@ -15,4 +17,7 @@ export {
   SmallCategories,
   NavigationBar,
   Header,
+  Modal,
+  ChangePWModal,
+  DeleteUserModal,
 };

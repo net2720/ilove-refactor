@@ -85,9 +85,9 @@ export const Home = () => {
           <FlexGrow></FlexGrow>
 
           <MenuSeb>
-            <Link to="/login">
+            <StyledLink to="/login">
               <SebP style={{ display: showTab }}>로그인</SebP>
-            </Link>
+            </StyledLink>
           </MenuSeb>
 
           <MenuSeb>
@@ -97,9 +97,9 @@ export const Home = () => {
           </MenuSeb>
 
           <MenuSeb>
-            <Link to="/signUp">
+            <StyledLink to="/signUp">
               <SebP style={{ display: showTab }}>회원가입</SebP>
-            </Link>
+            </StyledLink>
           </MenuSeb>
         </TopMenuBar>
 
@@ -138,6 +138,10 @@ const MainBannerImg = () => {
   );
 };
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+`;
 /*const H1 = styled.p`
   font-size: 28px;
   font-weight: 900;
@@ -220,7 +224,10 @@ const MenuSeb = styled.div`
 
 const SebP = styled.p``;
 
-const LogoutBut = styled.p``;
+const LogoutBut = styled.p`
+  text-decoration: none;
+  color: inherit;
+`;
 
 /*const Banner = styled.div`
   position: relative;
