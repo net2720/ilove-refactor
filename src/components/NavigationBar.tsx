@@ -1,26 +1,26 @@
-import map from '../assets/map.svg';
-import miniLogo from '../assets/miniLogo.svg';
-import myInfo from '../assets/myInfo.svg';
+import map from "../assets/map.svg";
+import miniLogo from "../assets/miniLogo.svg";
+import myInfo from "../assets/myInfo.svg";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 // 상수값 연결 링크
-import styled from 'styled-components';
-import { Colors } from '../constants/Colors';
+import styled from "styled-components";
+import { Colors } from "../constants/Colors";
 
 export const NavigationBar = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   let myPageLink;
 
   if (token) {
-    myPageLink = '/myPage';
-  } else myPageLink = '/';
+    myPageLink = "/myPage";
+  } else myPageLink = "/";
   return (
     <>
       <Nav>
         <NavUl>
           <NavLi>
-            <NavA to="/">
+            <NavA to="/SearchHp">
               <NavImg src={map} alt="star"></NavImg>
               <NavP>병원찾기</NavP>
             </NavA>

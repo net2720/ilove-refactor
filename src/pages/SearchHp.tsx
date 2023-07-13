@@ -3,8 +3,12 @@ import { Header } from "../components/Header";
 import { useState } from "react";
 import { SmallCategories } from "../components/SmallCategories";
 import { CardBox } from "../components/CardBox";
-import { BorderColor } from "../constants/Border";
+import { BorderColor, BorderRadius } from "../constants/Border";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
 
+import { useRecoilValue } from "recoil";
+import { latAtom, lngAtom } from "../recoil/atoms";
+import { IconMapG } from "../assets";
 // 애니메이션 발동을 위한 animate 타입 지정
 interface HpListBoxProps {
   animate: boolean;
@@ -14,6 +18,10 @@ export const SearchHp = () => {
   // HpListBox 가 화면에 보여진다면 true Y축 아래로 이동했다면 false
   const [listScrolled, setListScrolled] = useState(true);
 
+  const userLat = useRecoilValue(latAtom);
+  const userLon = useRecoilValue(lngAtom);
+  console.log(userLat);
+  console.log(userLon);
   // 애니메이션 발동 onClick 이벤트
   const handleSlideToggle = () => {
     setListScrolled((prev) => !prev);
@@ -21,31 +29,73 @@ export const SearchHp = () => {
 
   return (
     <>
-      <Header />
-      <HpListBox animate={!listScrolled}>
-        <HpListHeaderBox>
-          <SlideBtn onClick={handleSlideToggle} />
-          <HpListHeaderContent>
-            <SmallCategories>거리</SmallCategories>
-            <SmallCategories>진료시간</SmallCategories>
-          </HpListHeaderContent>
-        </HpListHeaderBox>
-        <HpDetailBox>
-          <CardBox>
-            <HpNumberBox>
-              <HpNumber>1</HpNumber>
-            </HpNumberBox>
-            <HpContentBox>
-              <span>병원 이름자리</span>
-              <span>병원 주소자리</span>
-            </HpContentBox>
-            <HpImageBox></HpImageBox>
-          </CardBox>
-        </HpDetailBox>
-      </HpListBox>
+      <Wrapper>
+        <Header />
+        <Map
+          center={{ lat: userLat, lng: userLon }} // 지도의 중심 좌표
+          style={{
+            width: "100%",
+            height: "100%",
+            zIndex: "1",
+          }}
+          level={3} // 지도 확대 레벨
+        >
+          <MapMarker
+            position={{ lat: userLat, lng: userLon }}
+            image={{
+              src: IconMapG,
+              size: {
+                width: 64,
+                height: 69,
+              }, // 마커이미지의 크기입니다
+              options: {
+                offset: {
+                  x: 27,
+                  y: 69,
+                }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+              },
+            }}
+          />
+        </Map>
+        <HpListBox animate={!listScrolled}>
+          <HpListHeaderBox>
+            <SlideBtn onClick={handleSlideToggle} />
+            <HpListHeaderContent>
+              <CategoryBox>
+                <SmallCategories>거리</SmallCategories>
+              </CategoryBox>
+              <CategoryBox>
+                <SmallCategories>진료시간</SmallCategories>
+              </CategoryBox>
+            </HpListHeaderContent>
+          </HpListHeaderBox>
+          <HpDetailBox>
+            <CardBox>
+              <HpNumberBox>
+                <HpNumber>1</HpNumber>
+              </HpNumberBox>
+              <HpContentBox>
+                <span>병원 이름자리</span>
+                <span>병원 주소자리</span>
+              </HpContentBox>
+              <HpImageBox></HpImageBox>
+            </CardBox>
+          </HpDetailBox>
+        </HpListBox>
+      </Wrapper>
     </>
   );
 };
+
+const Wrapper = styled.div`
+  width: 100%;
+  max-width: 834px;
+  margin: 0 auto;
+  text-align: center;
+  padding-bottom: 3%;
+  overflow: hidden;
+  height: 90vh;
+`;
 
 // 버튼 클릭 시 Y축으로 HpList 박스 이동
 const slideAnimation = keyframes`
@@ -53,19 +103,23 @@ const slideAnimation = keyframes`
     transform: translateY(0);
   }
   to {
-    transform: translateY(90%);
+    transform: translateY(75%);
   }
 `;
 
 // 헤더 ~네비게이션 사이 전체 박스
 const HpListBox = styled.div<HpListBoxProps>`
   width: 100%;
-  height: 650px;
-  margin-top: 5%;
-  background-color: rgb(128, 128, 128, 0.1);
+  height: 84%;
+  margin: 5% auto 0% auto;
+  background-color: white;
   border: ${BorderColor.thinBorder};
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
+
+  position: relative;
+  bottom: 90%;
+  z-index: 99;
   animation: ${({ animate }) =>
     animate &&
     css`
@@ -76,11 +130,17 @@ const HpListBox = styled.div<HpListBoxProps>`
 // HpListBox 내의 헤더 즉 상단 박스
 const HpListHeaderBox = styled.div`
   width: 100%;
-  height: 15%;
+  height: 20%;
+  overflow: hidden;
   background-color: white;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
+  border-top-left-radius: ${BorderRadius.SearchRadius};
+  border-top-right-radius: ${BorderRadius.SearchRadius};
   border-bottom: 1px solid rgb(128, 128, 128, 0.5);
+`;
+
+const CategoryBox = styled.div`
+  width: 30%;
+  margin-bottom: 3%;
 `;
 
 // 애니메이션 이벤트 버튼
@@ -92,9 +152,10 @@ const SlideBtn = styled.button`
 // HpListBox 헤더 부분의 내용을 적는 부분
 const HpListHeaderContent = styled.div`
   width: 100%;
-  height: 50%;
+  height: 70%;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  justify-content: space-around;
 `;
 
 // HpListBox 헤더 부분을 제외한 병원 리스트들을 담는 박스

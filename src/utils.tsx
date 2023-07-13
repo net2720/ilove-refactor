@@ -7,6 +7,8 @@ import { JoinButton } from "./components/BasicButton";
 import { Post } from "./pages/Post";
 import { instance } from "./services/Fetcher";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { latAtom, lngAtom } from "./recoil/atoms";
 
 interface IFormInput {
   email: string;
@@ -18,11 +20,8 @@ interface IFormInput {
 
 export const LoginValidated = () => {
   const navigate = useNavigate();
-  const [loginData, setLoginData] = useState<IFormInput>({
-    email: "",
-    pw: "",
-  });
-
+  const [userLat, setUserLat] = useRecoilState(latAtom);
+  const [userLon, setUserLon] = useRecoilState(lngAtom);
   const {
     register,
     handleSubmit,
@@ -42,6 +41,8 @@ export const LoginValidated = () => {
         password: data.pw,
       });
       console.log(response);
+      setUserLat(response.data.data.userLat);
+      setUserLon(response.data.data.userLon);
 
       const role = response.data.data.role;
       const token = response.data.data.token;
@@ -164,8 +165,8 @@ export const SignUpValidated = () => {
         password: registerData.pw,
         addr1: addr1,
         addr2: addr2,
-        lat: lat,
-        lng: lng,
+        userLat: lat,
+        userLon: lng,
       });
 
       navigate("/login");

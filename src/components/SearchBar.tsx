@@ -1,11 +1,11 @@
-import styled from 'styled-components';
-import { FontSize } from '../constants/FontSize';
-import { FiSearch } from 'react-icons/fi';
-import React, { useState } from 'react';
-import { BorderRadius } from '../constants/Border';
+import styled from "styled-components";
+import { FontSize } from "../constants/FontSize";
+import { FiSearch } from "react-icons/fi";
+import React, { useState } from "react";
+import { BorderRadius, BorderColor } from "../constants/Border";
 
 export const SearchBar = () => {
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState("");
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -15,7 +15,7 @@ export const SearchBar = () => {
 
   const handleSearchIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log('Input value:', keyword);
+    console.log("Input value:", keyword);
   };
 
   return (
@@ -40,7 +40,7 @@ const SearchWrapper = styled.form`
   justify-content: center;
   align-items: center;
   border-radius: ${BorderRadius.SearchRadius};
-  border: 1px solid grey;
+  border: ${BorderColor.thinBorder};
   margin: 0 auto;
   height: 50%;
 `;
