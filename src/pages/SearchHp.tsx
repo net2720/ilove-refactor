@@ -4,9 +4,11 @@ import { useState } from "react";
 import { SmallCategories } from "../components/SmallCategories";
 import { CardBox } from "../components/CardBox";
 import { BorderColor, BorderRadius } from "../constants/Border";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
 
-import { Map } from "react-kakao-maps-sdk";
-import { relative } from "path";
+import { useRecoilValue } from "recoil";
+import { latAtom, lngAtom } from "../recoil/atoms";
+import { IconMapG } from "../assets";
 // 애니메이션 발동을 위한 animate 타입 지정
 interface HpListBoxProps {
   animate: boolean;
@@ -16,6 +18,10 @@ export const SearchHp = () => {
   // HpListBox 가 화면에 보여진다면 true Y축 아래로 이동했다면 false
   const [listScrolled, setListScrolled] = useState(true);
 
+  const userLat = useRecoilValue(latAtom);
+  const userLon = useRecoilValue(lngAtom);
+  console.log(userLat);
+  console.log(userLon);
   // 애니메이션 발동 onClick 이벤트
   const handleSlideToggle = () => {
     setListScrolled((prev) => !prev);
@@ -26,14 +32,31 @@ export const SearchHp = () => {
       <Wrapper>
         <Header />
         <Map
-          center={{ lat: 33.5563, lng: 126.79581 }} // 지도의 중심 좌표
+          center={{ lat: userLat, lng: userLon }} // 지도의 중심 좌표
           style={{
             width: "100%",
             height: "100%",
             zIndex: "1",
           }}
           level={3} // 지도 확대 레벨
-        ></Map>
+        >
+          <MapMarker
+            position={{ lat: userLat, lng: userLon }}
+            image={{
+              src: IconMapG,
+              size: {
+                width: 64,
+                height: 69,
+              }, // 마커이미지의 크기입니다
+              options: {
+                offset: {
+                  x: 27,
+                  y: 69,
+                }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+              },
+            }}
+          />
+        </Map>
         <HpListBox animate={!listScrolled}>
           <HpListHeaderBox>
             <SlideBtn onClick={handleSlideToggle} />
@@ -70,7 +93,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
   text-align: center;
   padding-bottom: 3%;
-
+  overflow: hidden;
   height: 90vh;
 `;
 

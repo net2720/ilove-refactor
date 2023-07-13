@@ -1,15 +1,23 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
-export const streetAddress = atom({
-  key: "streetAddress",
-  default: {
-    streetAddress: "",
-  },
+const { persistAtom } = recoilPersist({
+  key: "sessionStorage", //원하는 key 값 입력
+  storage: sessionStorage,
 });
 
-export const additionalAddress = atom({
-  key: "additionalAddress",
+export const latAtom = atom({
+  key: "latAtom",
   default: {
-    additionalAddress: "",
+    latAtom: "",
   },
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const lngAtom = atom({
+  key: "lngAtom",
+  default: {
+    lngAtom: "",
+  },
+  effects_UNSTABLE: [persistAtom],
 });
