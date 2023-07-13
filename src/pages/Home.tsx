@@ -1,65 +1,71 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  useNavigate,
-} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import banner1 from '../assets/banner1.jpg';
 import banner2 from '../assets/banner2.jpg';
 import banner3 from '../assets/banner3.jpg';
 
-import axios from 'axios';
+//import axios from 'axios';
 
-import Select from 'react-select';
+//import Select from 'react-select';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from 'react-toastify';
 
-import mainLogo from '../assets/mainLogo.svg';
-import mainLogoSeb from '../assets/mainLogoSeb.svg';
-import MainBanner from '../assets/mainBanner.png';
-import iconPeople from '../assets/iconPeople.svg';
-import arrowRight from '../assets/arrowRight.svg';
-import pinwheel from '../assets/Pinwheel.gif';
-import Loding from '../assets/ImgLoding.jpg';
+//import mainLogo from '../assets/mainLogo.svg';
+//import mainLogoSeb from '../assets/mainLogoSeb.svg';
+//import MainBanner from '../assets/mainBanner.png';
+//import iconPeople from '../assets/iconPeople.svg';
+//import arrowRight from '../assets/arrowRight.svg';
+//import pinwheel from '../assets/Pinwheel.gif';
+//import Loding from '../assets/ImgLoding.jpg';
 import newLogo from '../assets/newLogo.jpg';
 
-import {
-  BasicButton,
-  CardBox,
-  Header,
-  NavigationBar,
-  Container,
-  SearchBar,
-} from '../components/Index';
+import { Container, SearchBar } from '../components/Index';
 
 import { Colors } from '../constants/Colors';
-import { FontSize } from '../constants/FontSize';
+//import { FontSize } from '../constants/FontSize';
 
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-interface SearchBarProps {
+/*interface SearchBarProps {
   onSearch: (keyword: string) => void;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-}
+}*/
 
 export const Home = () => {
+  const token = localStorage.getItem('token');
   let showTab = '';
   let hideTab = 'none';
+  if (token) {
+    showTab = 'none';
+    hideTab = '';
+  } else {
+    showTab = '';
+    hideTab = 'none';
+  }
   const navigate = useNavigate();
 
-  const [search, setSearch] = useState('');
-  const [searchKeyword, setSearchKeyword] = useState('');
+  /*const [search, setSearch] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');*/
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    const role = localStorage.getItem('role');
+
+    if (token && role) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      toast('로그아웃 성공');
+    } else {
+      toast('오류로 인해 로그아웃 하지 못했습니다.');
+    }
+    navigate('/');
+  };
 
   return (
     <>
@@ -79,7 +85,9 @@ export const Home = () => {
           <FlexGrow></FlexGrow>
 
           <MenuSeb>
-            <SebP style={{ display: showTab }}>로그인</SebP>
+            <Link to="/login">
+              <SebP style={{ display: showTab }}>로그인</SebP>
+            </Link>
           </MenuSeb>
 
           <MenuSeb>
@@ -89,7 +97,9 @@ export const Home = () => {
           </MenuSeb>
 
           <MenuSeb>
-            <SebP style={{ display: showTab }}>회원가입</SebP>
+            <Link to="/signUp">
+              <SebP style={{ display: showTab }}>회원가입</SebP>
+            </Link>
           </MenuSeb>
         </TopMenuBar>
 
@@ -128,7 +138,7 @@ const MainBannerImg = () => {
   );
 };
 
-const H1 = styled.p`
+/*const H1 = styled.p`
   font-size: 28px;
   font-weight: 900;
   color: ${Colors.fontColor};
@@ -178,7 +188,7 @@ const MainLogoImg = styled.img`
   margin-top: 4%;
   margin-top: 4%;
   width: 30%;
-`;
+`;*/
 
 const NewLogoImg = styled.img`
   width: 100%;
@@ -212,7 +222,7 @@ const SebP = styled.p``;
 
 const LogoutBut = styled.p``;
 
-const Banner = styled.div`
+/*const Banner = styled.div`
   position: relative;
   width: 100%;
   border-radius: 20px;
@@ -324,7 +334,7 @@ const Guide = styled.p`
   margin: 10% 0 10% 0;
   color: ${Colors.InputBorderOut};
   // text-align: center;
-`;
+`;*/
 
 const BannerImg = styled.img`
   width: 100%;

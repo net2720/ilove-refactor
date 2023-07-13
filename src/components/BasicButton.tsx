@@ -30,6 +30,15 @@ export const StyledButton = styled.button<BasicButtonProps>`
   border: 1px solid ${Colors.primary};
 `;
 
+export const DeleteButton = styled.button<BasicButtonProps>`
+  padding: ${(props) => (props.small ? '2%' : '5%')};
+  background-color: ${Colors.InputBorderInFont};
+  color: #666666;
+  width: 100%;
+  font-size: ${FontSize.h2};
+  border: 1px solid ${Colors.InputBorderInFont};
+`;
+
 export const JoinButton = styled.button`
   /* 일반 버튼 스타일 */
   font-size: ${FontSize.but};
