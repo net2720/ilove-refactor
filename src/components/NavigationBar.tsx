@@ -10,6 +10,11 @@ import { Colors } from '../constants/Colors';
 
 export const NavigationBar = () => {
   const token = localStorage.getItem('token');
+  let myPageLink;
+
+  if (token) {
+    myPageLink = '/myPage';
+  } else myPageLink = '/';
   return (
     <>
       <Nav>
@@ -28,17 +33,10 @@ export const NavigationBar = () => {
           </NavLi>
 
           <NavLi>
-            {token ? (
-              <NavA to="/myPage">
-                <NavImg src={myInfo} alt="star"></NavImg>
-                <NavP>내정보</NavP>
-              </NavA>
-            ) : (
-              <NavA to="/login">
-                <NavImg src={myInfo} alt="star"></NavImg>
-                <NavP>내정보</NavP>
-              </NavA>
-            )}
+            <NavA to={myPageLink}>
+              <NavImg src={myInfo} alt="star"></NavImg>
+              <NavP>내정보</NavP>
+            </NavA>
           </NavLi>
         </NavUl>
       </Nav>
