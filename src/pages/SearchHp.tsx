@@ -3,7 +3,7 @@ import { Header } from "../components/Header";
 import { useState } from "react";
 import { SmallCategories } from "../components/SmallCategories";
 import { CardBox } from "../components/CardBox";
-import { BorderColor } from "../constants/Border";
+import { BorderColor, BorderRadius } from "../constants/Border";
 
 // 애니메이션 발동을 위한 animate 타입 지정
 interface HpListBoxProps {
@@ -22,12 +22,17 @@ export const SearchHp = () => {
   return (
     <>
       <Header />
+
       <HpListBox animate={!listScrolled}>
         <HpListHeaderBox>
           <SlideBtn onClick={handleSlideToggle} />
           <HpListHeaderContent>
-            <SmallCategories>거리</SmallCategories>
-            <SmallCategories>진료시간</SmallCategories>
+            <CategoryBox>
+              <SmallCategories>거리</SmallCategories>
+            </CategoryBox>
+            <CategoryBox>
+              <SmallCategories>진료시간</SmallCategories>
+            </CategoryBox>
           </HpListHeaderContent>
         </HpListHeaderBox>
         <HpDetailBox>
@@ -53,7 +58,7 @@ const slideAnimation = keyframes`
     transform: translateY(0);
   }
   to {
-    transform: translateY(90%);
+    transform: translateY(70%);
   }
 `;
 
@@ -76,11 +81,16 @@ const HpListBox = styled.div<HpListBoxProps>`
 // HpListBox 내의 헤더 즉 상단 박스
 const HpListHeaderBox = styled.div`
   width: 100%;
-  height: 15%;
+  height: 22%;
   background-color: white;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
+  border-top-left-radius: ${BorderRadius.SearchRadius};
+  border-top-right-radius: ${BorderRadius.SearchRadius};
   border-bottom: 1px solid rgb(128, 128, 128, 0.5);
+`;
+
+const CategoryBox = styled.div`
+  width: 30%;
+  margin-bottom: 3%;
 `;
 
 // 애니메이션 이벤트 버튼
@@ -92,9 +102,10 @@ const SlideBtn = styled.button`
 // HpListBox 헤더 부분의 내용을 적는 부분
 const HpListHeaderContent = styled.div`
   width: 100%;
-  height: 50%;
+  height: 70%;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+  justify-content: space-around;
 `;
 
 // HpListBox 헤더 부분을 제외한 병원 리스트들을 담는 박스

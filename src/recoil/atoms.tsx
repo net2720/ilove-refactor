@@ -1,6 +1,15 @@
 import { atom } from "recoil";
 
-export const addressAtom = atom({
-  key: "addressAtom",
-  default: "",
+export const streetAddress = atom({
+  key: "streetAddress",
+  default: {
+    streetAddress: "",
+  },
+});
+
+export const additionalAddress = atom({
+  key: "additionalAddress",
+  default: {
+    additionalAddress: "",
+  },
 });

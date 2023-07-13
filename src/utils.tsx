@@ -18,10 +18,6 @@ interface IFormInput {
 
 export const LoginValidated = () => {
   const navigate = useNavigate();
-  const [loginData, setLoginData] = useState<IFormInput>({
-    email: "",
-    pw: "",
-  });
 
   const {
     register,
@@ -164,8 +160,8 @@ export const SignUpValidated = () => {
         password: registerData.pw,
         addr1: addr1,
         addr2: addr2,
-        lat: lat,
-        lng: lng,
+        userLat: lat,
+        userLon: lng,
       });
 
       navigate("/login");
