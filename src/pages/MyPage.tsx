@@ -1,41 +1,105 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 import IconLeft from '../assets/iconLeft.svg';
 import PinWheel from '../assets/Pinwheel.gif';
 
-import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify';
 
 import { Colors, FontSize } from '../constants/Index';
 import { CardBox, Container } from '../components/Index';
 
-import { BasicButton, DeleteButton } from '../components/Index';
+import { BasicButton, DeleteButton, ChangePWModal } from '../components/Index';
 import { instance } from '../services/Fetcher';
+import {
+  ChangePWModalRef,
+  DeleteUserModal,
+  DeleteUserModalRef,
+} from '../components/MyPageModal';
 
 export const MyPage = () => {
   const token = localStorage.getItem('token');
 
+  //유저 정보 상태 관리
+  const [originState, setOriginState] = useState({});
   const [nameState, setNameState] = useState('');
   const [contectState, setContectState] = useState('');
   const [addr1State, setAddr1State] = useState('');
   const [addr2State, setAddr2State] = useState('');
+  const [latState, setLatState] = useState(0);
+  const [lonState, setLonState] = useState(0);
+  const [emailState, setEmailState] = useState('');
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  const changePWModalRef = useRef<ChangePWModalRef>(null);
+  const deleteUserModalRef = useRef<DeleteUserModalRef>(null);
+
   useEffect(() => {
     const fetchUserData = async () => {
       const response = await instance.get('/users/get');
       const userData = response.data.data[0];
-      console.log(userData);
+      setOriginState(userData);
       setNameState(userData.name);
       setContectState(userData.phoneNumber);
       setAddr1State(userData.addr1);
       setAddr2State(userData.addr2);
+      setLatState(userData.userLat);
+      setLonState(userData.userLon);
+      setEmailState(userData.email);
     };
     fetchUserData();
   }, [token]);
 
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const editFinish = async () => {
+    const checkNum = contectState.split('-');
+    if (checkNum.length !== 3 || checkNum[0] !== '010') {
+      toast(`연락처를 정확히 입력해 주세요. 입력 형식은 010-XXXX-XXXX 입니다.`);
+    } else {
+      await instance.patch('/users/update', {
+        name: nameState,
+        phoneNumber: contectState,
+        addr1: addr1State,
+        addr2: addr2State,
+        userLat: latState,
+        userLon: lonState,
+      });
+      setIsEditing(false);
+    }
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNameState(e.target.value);
+  };
+
+  const handleContectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setContectState(e.target.value);
+  };
+
+  const handleEditCancle = () => {
+    //@ts-ignore
+    setNameState(originState.name);
+    //@ts-ignore
+    setContectState(originState.phoneNumber);
+    setIsEditing(false);
+  };
+
   const navigate = useNavigate();
   return (
     <Container>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        closeButton={false}
+        autoClose={4000}
+        hideProgressBar
+      />
       <HeaderWrap>
         <BtnBack onClick={() => navigate('/')}>
           <img alt="icon-left" src={IconLeft}></img>
@@ -53,15 +117,23 @@ export const MyPage = () => {
       </CardBox>
       <CardBox>
         <TagName>이름</TagName>
-        <Info>{nameState}</Info>
+        {isEditing ? (
+          <Edit value={nameState} onChange={handleNameChange} />
+        ) : (
+          <Info>{nameState}</Info>
+        )}
       </CardBox>
       <CardBox>
         <TagName>이메일</TagName>
-        <Info>popcron13@gmail.com</Info>
+        <Info>{emailState}</Info>
       </CardBox>
       <CardBox>
         <TagName>연락처</TagName>
-        <Info>{contectState}</Info>
+        {isEditing ? (
+          <Edit value={contectState} onChange={handleContectChange} />
+        ) : (
+          <Info>{contectState}</Info>
+        )}
       </CardBox>
       <CardBox>
         <TagName>주소</TagName>
@@ -70,10 +142,30 @@ export const MyPage = () => {
         </Info>
       </CardBox>
       <ButtonGridBox>
-        <BasicButton>정보 수정</BasicButton>
-        <BasicButton>비밀 번호 변경</BasicButton>
-        <DeleteButton>회원 탈퇴</DeleteButton>
+        {isEditing ? (
+          <BasicButton onClick={editFinish}>수정 완료</BasicButton>
+        ) : (
+          <BasicButton onClick={handleEdit}>정보 수정</BasicButton>
+        )}
+        {isEditing ? (
+          <DeleteButton onClick={handleEditCancle}>수정 취소</DeleteButton>
+        ) : (
+          <BasicButton onClick={(e) => changePWModalRef.current?.openModal()}>
+            비밀 번호 변경
+          </BasicButton>
+        )}
+        {isEditing ? (
+          <></>
+        ) : (
+          <DeleteButton
+            onClick={(e) => deleteUserModalRef.current?.openModal()}
+          >
+            회원 탈퇴
+          </DeleteButton>
+        )}
       </ButtonGridBox>
+      <ChangePWModal ref={changePWModalRef} />
+      <DeleteUserModal ref={deleteUserModalRef} />
     </Container>
   );
 };
@@ -87,7 +179,7 @@ const BtnBack = styled.button`
 
 const TagName = styled.div`
   margin: 2%;
-  width: 8%;
+  width: 20%;
   color: ${Colors.InputBorderOut};
   font-weight: bold;
 `;
@@ -96,6 +188,10 @@ const Info = styled.div`
   margin: 2%;
   color: ${Colors.fontColor};
   font-weight: bold;
+`;
+
+const Edit = styled.input`
+  margin: 2%;
 `;
 
 const HeaderWrap = styled.div`
