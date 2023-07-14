@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import DaumPostCode from 'react-daum-postcode';
+import React, { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import DaumPostCode from "react-daum-postcode";
 
-import IconLeft from '../assets/iconLeft.svg';
-import PinWheel from '../assets/Pinwheel.gif';
+import IconLeft from "../assets/iconLeft.svg";
+import PinWheel from "../assets/Pinwheel.gif";
 
-import 'react-toastify/dist/ReactToastify.css';
-import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 
-import { BorderRadius, Colors, FontSize } from '../constants/Index';
-import { CardBox, Container } from '../components/Index';
+import { BorderRadius, Colors, FontSize } from "../constants/Index";
+import { CardBox, Container } from "../components/Index";
 
-import { BasicButton, DeleteButton, ChangePWModal } from '../components/Index';
-import { instance } from '../services/Fetcher';
+import { BasicButton, DeleteButton, ChangePWModal } from "../components/Index";
+import { instance } from "../services/Fetcher";
 import {
   ChangePWModalRef,
   DeleteUserModal,
   DeleteUserModalRef,
-} from '../components/MyPageModal';
-import axios from 'axios';
+} from "../components/MyPageModal";
+import axios from "axios";
 
 interface Latlng {
   lat: number | null;
@@ -36,18 +36,22 @@ interface User {
   userLon: number;
 }
 
-export const MyPage = () => {
-  const token = localStorage.getItem('token');
+interface MyPageProps {
+  tokenLogoutAndDelete: () => void;
+}
+
+export const MyPage = ({ tokenLogoutAndDelete }: MyPageProps) => {
+  const token = localStorage.getItem("token");
 
   //유저 정보 상태 관리
   const [originState, setOriginState] = useState<User | null>(null);
-  const [nameState, setNameState] = useState('');
-  const [contectState, setContectState] = useState('');
-  const [addr1State, setAddr1State] = useState('');
-  const [addr2State, setAddr2State] = useState('');
+  const [nameState, setNameState] = useState("");
+  const [contectState, setContectState] = useState("");
+  const [addr1State, setAddr1State] = useState("");
+  const [addr2State, setAddr2State] = useState("");
   const [latState, setLatState] = useState(0);
   const [lonState, setLonState] = useState(0);
-  const [emailState, setEmailState] = useState('');
+  const [emailState, setEmailState] = useState("");
 
   const [isEditing, setIsEditing] = useState(false);
   const [addrModalState, setAddrModalState] = useState(false);
@@ -57,7 +61,7 @@ export const MyPage = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const response = await instance.get('/users/get');
+      const response = await instance.get("/users/get");
       const userData = response.data.data[0];
       setOriginState(userData);
       setNameState(userData.name);
@@ -69,18 +73,18 @@ export const MyPage = () => {
       setEmailState(userData.email);
     };
     fetchUserData();
-  }, [token]);
+  }, []);
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const editFinish = async () => {
-    const checkNum = contectState.split('-');
-    if (checkNum.length !== 3 || checkNum[0] !== '010') {
+    const checkNum = contectState.split("-");
+    if (checkNum.length !== 3 || checkNum[0] !== "010") {
       toast(`연락처를 정확히 입력해 주세요. 입력 형식은 010-XXXX-XXXX 입니다.`);
     } else {
-      await instance.patch('/users/update', {
+      await instance.patch("/users/update", {
         name: nameState,
         phoneNumber: contectState,
         addr1: addr1State,
@@ -121,17 +125,17 @@ export const MyPage = () => {
 
   const handleDaumApi = async (data: any) => {
     let fullAddress = data.address;
-    let extraAddress = '';
+    let extraAddress = "";
 
     const { addressType, bname, buildingName } = data;
-    if (addressType === 'R') {
-      if (bname !== '') {
+    if (addressType === "R") {
+      if (bname !== "") {
         extraAddress += bname;
       }
-      if (buildingName !== '') {
-        extraAddress += `${extraAddress !== '' && ', '}${buildingName}`;
+      if (buildingName !== "") {
+        extraAddress += `${extraAddress !== "" && ", "}${buildingName}`;
       }
-      fullAddress += `${extraAddress !== '' ? ` ${extraAddress}` : ''}`;
+      fullAddress += `${extraAddress !== "" ? ` ${extraAddress}` : ""}`;
     }
 
     const convertAddressToCoordinates = async () => {
@@ -156,9 +160,9 @@ export const MyPage = () => {
     };
     const { lat, lng }: Latlng = await convertAddressToCoordinates();
 
-    const newAddress = data.address.split(' '); // 검색한 주소를 배열로 전환
-    const dutyAddr1Depth = newAddress.splice(0, 2).join(' '); // 시,도 주소를 뽑아내기 위해서 인덱스 번호로 자름
-    const dutyAddr2Depth = [...newAddress].join(' '); // 시,도 주소를 제외한 나머지 주소를 상세주소 변수에 추가
+    const newAddress = data.address.split(" "); // 검색한 주소를 배열로 전환
+    const dutyAddr1Depth = newAddress.splice(0, 2).join(" "); // 시,도 주소를 뽑아내기 위해서 인덱스 번호로 자름
+    const dutyAddr2Depth = [...newAddress].join(" "); // 시,도 주소를 제외한 나머지 주소를 상세주소 변수에 추가
 
     setAddr1State(dutyAddr1Depth); // 시,도 주소 변수 값으로 State변화
     setAddr2State(dutyAddr2Depth); // 상세주소 변수 값으로 State변화
@@ -179,7 +183,7 @@ export const MyPage = () => {
         hideProgressBar
       />
       <HeaderWrap>
-        <BtnBack onClick={() => navigate('/')}>
+        <BtnBack onClick={() => navigate("/")}>
           <img alt="icon-left" src={IconLeft}></img>
         </BtnBack>
         <HeaderName>
@@ -251,7 +255,10 @@ export const MyPage = () => {
         )}
       </ButtonGridBox>
       <ChangePWModal ref={changePWModalRef} />
-      <DeleteUserModal ref={deleteUserModalRef} />
+      <DeleteUserModal
+        ref={deleteUserModalRef}
+        tokenLogoutAndDelete={tokenLogoutAndDelete}
+      />
       {addrModalState && (
         <ModalContainer>
           <Modal>

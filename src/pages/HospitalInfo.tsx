@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import 'react-toastify/dist/ReactToastify.css';
-import { toast, ToastContainer } from 'react-toastify';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import { IconMapG } from '../assets';
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { IconMapG } from "../assets";
 
-import locationGreen from '../assets/iconLocationGreen.svg';
-import phoneGreen from '../assets/phoneGreen.svg';
-import clockGreen from '../assets/clockGreen.svg';
-import tagGreen from '../assets/tagGreen.svg';
-import smileGreen from '../assets/smileGreen.svg';
-import IconLeft from '../assets/iconLeft.svg';
-import { instance } from '../services/Fetcher';
+import locationGreen from "../assets/iconLocationGreen.svg";
+import phoneGreen from "../assets/phoneGreen.svg";
+import clockGreen from "../assets/clockGreen.svg";
+import tagGreen from "../assets/tagGreen.svg";
+import smileGreen from "../assets/smileGreen.svg";
+import IconLeft from "../assets/iconLeft.svg";
+import { instance } from "../services/Fetcher";
 
-import { Container, SmallCategories } from '../components/Index';
+import { Container, SmallCategories } from "../components/Index";
 
-import { Colors, FontSize } from '../constants/Index';
+import { Colors, FontSize } from "../constants/Index";
 
 interface NewHeaderProps {
   label: string | null | undefined;
@@ -60,9 +60,9 @@ type TimeProps = (time: string | null) => string | null;
 export const HospitalInfo = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const hospitalId = searchParams.get('id');
-  const token = localStorage.getItem('token')
-    ? localStorage.getItem('token')
+  const hospitalId = searchParams.get("id");
+  const token = localStorage.getItem("token")
+    ? localStorage.getItem("token")
     : false;
   const navigate = useNavigate();
 
@@ -116,7 +116,7 @@ export const HospitalInfo = () => {
         setUserReviews([]);
       }
     } else {
-      toast('로그인을 진행해 주세요');
+      toast("로그인을 진행해 주세요");
     }
   };
 
@@ -133,7 +133,7 @@ export const HospitalInfo = () => {
     return (
       <>
         <HeaderWrap>
-          <BtnBack onClick={() => navigate('/search')}>
+          <BtnBack onClick={() => navigate("/search")}>
             <img alt="icon-left" src={IconLeft}></img>
           </BtnBack>
           <HeaderName>
@@ -238,7 +238,7 @@ export const HospitalInfo = () => {
         </HpInfo>
         <ReviewContainer>
           <ReviewButton
-            onClick={() => reviewClick('kindDoctor')}
+            onClick={() => reviewClick("kindDoctor")}
             $clicked={userReviews}
             label="kindDoctor"
           >
@@ -248,7 +248,7 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
           <ReviewButton
-            onClick={() => reviewClick('professional')}
+            onClick={() => reviewClick("professional")}
             $clicked={userReviews}
             label="professional"
           >
@@ -258,7 +258,7 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
           <ReviewButton
-            onClick={() => reviewClick('kindEmployee')}
+            onClick={() => reviewClick("kindEmployee")}
             $clicked={userReviews}
             label="kindEmployee"
           >
@@ -268,7 +268,7 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
           <ReviewButton
-            onClick={() => reviewClick('goodReceipt')}
+            onClick={() => reviewClick("goodReceipt")}
             $clicked={userReviews}
             label="goodReceipt"
           >
@@ -278,7 +278,7 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
           <ReviewButton
-            onClick={() => reviewClick('cleanHospital')}
+            onClick={() => reviewClick("cleanHospital")}
             $clicked={userReviews}
             label="cleanHospital"
           >
@@ -288,7 +288,7 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
           <ReviewButton
-            onClick={() => reviewClick('goodTraffic')}
+            onClick={() => reviewClick("goodTraffic")}
             $clicked={userReviews}
             label="goodTraffic"
           >
@@ -306,9 +306,9 @@ export const HospitalInfo = () => {
                 lng: hospitalData.wgs84Lon,
               }} // 지도의 중심 좌표
               style={{
-                width: '100%',
-                height: '100%',
-                zIndex: '1',
+                width: "100%",
+                height: "100%",
+                zIndex: "1",
               }}
               level={3} // 지도 확대 레벨
             >
@@ -548,14 +548,14 @@ const ReviewButton = styled.button<ReviewButtonProps>`
     if ($clicked === label) {
       return Colors.primary;
     } else {
-      return '#f4f4f4';
+      return "#f4f4f4";
     }
   }};
   color: ${({ $clicked, label }) => {
     if ($clicked === label) {
-      return 'white';
+      return "white";
     } else {
-      return '#333333';
+      return "#333333";
     }
   }};
   border: 1px solid #00ad5c;
@@ -570,9 +570,9 @@ const ReviewButton = styled.button<ReviewButtonProps>`
   span {
     color: ${({ $clicked, label }) => {
       if ($clicked === label) {
-        return 'white';
+        return "white";
       } else {
-        return '#333333';
+        return "#333333";
       }
     }};
     position: absolute;

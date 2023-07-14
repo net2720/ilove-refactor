@@ -1,17 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import { Link, useNavigate } from "react-router-dom";
 
-import banner1 from '../assets/banner1.jpg';
-import banner2 from '../assets/banner2.jpg';
-import banner3 from '../assets/banner3.jpg';
+import banner1 from "../assets/banner1.jpg";
+import banner2 from "../assets/banner2.jpg";
+import banner3 from "../assets/banner3.jpg";
 
 //import axios from 'axios';
 
 //import Select from 'react-select';
 
-import 'react-toastify/dist/ReactToastify.css';
-import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
 
 //import mainLogo from '../assets/mainLogo.svg';
 //import mainLogoSeb from '../assets/mainLogoSeb.svg';
@@ -20,16 +20,16 @@ import { toast, ToastContainer } from 'react-toastify';
 //import arrowRight from '../assets/arrowRight.svg';
 //import pinwheel from '../assets/Pinwheel.gif';
 //import Loding from '../assets/ImgLoding.jpg';
-import newLogo from '../assets/newLogo.jpg';
+import newLogo from "../assets/newLogo.jpg";
 
-import { Container, SearchBar } from '../components/Index';
+import { Container, SearchBar } from "../components/Index";
 
-import { Colors } from '../constants/Colors';
+import { Colors } from "../constants/Colors";
 //import { FontSize } from '../constants/FontSize';
 
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 /*interface SearchBarProps {
   onSearch: (keyword: string) => void;
@@ -38,23 +38,35 @@ import 'slick-carousel/slick/slick-theme.css';
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }*/
 
-export const Home = () => {
-  const token = localStorage.getItem('token');
-  let showTab = '';
-  let hideTab = 'none';
+interface HomeProps {
+  tokenLogoutAndDelete: () => void;
+}
+
+export const Home = ({ tokenLogoutAndDelete }: HomeProps) => {
+  const token = localStorage.getItem("token");
+  let showTab = "";
+  let hideTab = "none";
   if (token) {
-    showTab = 'none';
-    hideTab = '';
+    showTab = "none";
+    hideTab = "";
   } else {
-    showTab = '';
-    hideTab = 'none';
+    showTab = "";
+    hideTab = "none";
   }
   const navigate = useNavigate();
 
   /*const [search, setSearch] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');*/
 
-  const handleLogout = () => {
+  const handleLogoutClick = () => {
+    tokenLogoutAndDelete();
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    toast("로그아웃 성공");
+    navigate("/");
+  };
+
+  /*const handleLogout = () => {
     const role = localStorage.getItem('role');
 
     if (token && role) {
@@ -65,7 +77,7 @@ export const Home = () => {
       toast('오류로 인해 로그아웃 하지 못했습니다.');
     }
     navigate('/');
-  };
+  };*/
 
   return (
     <>
@@ -91,7 +103,7 @@ export const Home = () => {
           </MenuSeb>
 
           <MenuSeb>
-            <LogoutBut style={{ display: hideTab }} onClick={handleLogout}>
+            <LogoutBut style={{ display: hideTab }} onClick={handleLogoutClick}>
               로그아웃
             </LogoutBut>
           </MenuSeb>
