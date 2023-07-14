@@ -18,11 +18,7 @@ interface IFormInput {
   phoneNumber?: string;
 }
 
-interface LoginValidatedProps {
-  tokenLogin: () => void;
-}
-
-export const LoginValidated = ({ tokenLogin }: LoginValidatedProps) => {
+export const LoginValidated = () => {
   const navigate = useNavigate();
   const [userLat, setUserLat] = useRecoilState(latAtom);
   const [userLon, setUserLon] = useRecoilState(lngAtom);
@@ -55,7 +51,6 @@ export const LoginValidated = ({ tokenLogin }: LoginValidatedProps) => {
       console.log("token", token);
       localStorage.setItem("role", role);
       localStorage.setItem("token", token);
-      tokenLogin();
 
       navigate("/");
     } catch (error) {

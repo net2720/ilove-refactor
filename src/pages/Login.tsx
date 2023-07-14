@@ -6,11 +6,7 @@ import { Colors } from "../constants/Colors";
 import { LoginValidated } from "../utils";
 import { Link } from "react-router-dom";
 
-interface HandleLoginProps {
-  tokenLogin: () => void;
-}
-
-export const Login = ({ tokenLogin }: HandleLoginProps) => {
+export const Login = () => {
   return (
     <>
       <Container>
@@ -20,7 +16,7 @@ export const Login = ({ tokenLogin }: HandleLoginProps) => {
         </MainLogoDiv>
 
         <LoginFormDiv>
-          <LoginValidated tokenLogin={tokenLogin} />
+          <LoginValidated />
         </LoginFormDiv>
 
         <Div>
