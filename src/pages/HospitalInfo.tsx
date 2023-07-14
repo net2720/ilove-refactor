@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import 'react-toastify/dist/ReactToastify.css';
-import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
+import { IconMapG } from "../assets";
 
-import locationWhite from '../assets/iconLocationWhite.svg';
-import locationGreen from '../assets/iconLocationGreen.svg';
-import phoneGreen from '../assets/phoneGreen.svg';
-import clockGreen from '../assets/clockGreen.svg';
-import tagGreen from '../assets/tagGreen.svg';
-import smileGreen from '../assets/smileGreen.svg';
-import IconLeft from '../assets/iconLeft.svg';
-import { instance } from '../services/Fetcher';
+import locationGreen from "../assets/iconLocationGreen.svg";
+import phoneGreen from "../assets/phoneGreen.svg";
+import clockGreen from "../assets/clockGreen.svg";
+import tagGreen from "../assets/tagGreen.svg";
+import smileGreen from "../assets/smileGreen.svg";
+import IconLeft from "../assets/iconLeft.svg";
+import { instance } from "../services/Fetcher";
 
-import { Container, SmallCategories } from '../components/Index';
+import { Container, SmallCategories } from "../components/Index";
 
-import { Colors, FontSize } from '../constants/Index';
+import { Colors, FontSize } from "../constants/Index";
 
 interface NewHeaderProps {
   label: string | null | undefined;
@@ -26,7 +27,7 @@ interface NewHeaderProps {
 interface ReviewButtonProps {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   label: string;
-  clicked: {};
+  $clicked: {};
 }
 
 interface HospitalDataProps {
@@ -50,6 +51,8 @@ interface HospitalDataProps {
   dutyTime8c: string | null;
   dutyTime8s: string | null;
   dutyEtc: string | null;
+  wgs84Lat: number | null;
+  wgs84Lon: number | null;
 }
 
 type TimeProps = (time: string | null) => string | null;
@@ -57,9 +60,9 @@ type TimeProps = (time: string | null) => string | null;
 export const HospitalInfo = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const hospitalId = searchParams.get('id');
-  const token = localStorage.getItem('token')
-    ? localStorage.getItem('token')
+  const hospitalId = searchParams.get("id");
+  const token = localStorage.getItem("token")
+    ? localStorage.getItem("token")
     : false;
   const navigate = useNavigate();
 
@@ -113,7 +116,7 @@ export const HospitalInfo = () => {
         setUserReviews([]);
       }
     } else {
-      toast('로그인을 진행해 주세요');
+      toast("로그인을 진행해 주세요");
     }
   };
 
@@ -130,7 +133,7 @@ export const HospitalInfo = () => {
     return (
       <>
         <HeaderWrap>
-          <BtnBack onClick={() => navigate('/search')}>
+          <BtnBack onClick={() => navigate("/search")}>
             <img alt="icon-left" src={IconLeft}></img>
           </BtnBack>
           <HeaderName>
@@ -235,8 +238,8 @@ export const HospitalInfo = () => {
         </HpInfo>
         <ReviewContainer>
           <ReviewButton
-            onClick={() => reviewClick('kindDoctor')}
-            clicked={userReviews}
+            onClick={() => reviewClick("kindDoctor")}
+            $clicked={userReviews}
             label="kindDoctor"
           >
             친절한 의사 선생님
@@ -245,8 +248,8 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
           <ReviewButton
-            onClick={() => reviewClick('professional')}
-            clicked={userReviews}
+            onClick={() => reviewClick("professional")}
+            $clicked={userReviews}
             label="professional"
           >
             전문적인 치료
@@ -255,8 +258,8 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
           <ReviewButton
-            onClick={() => reviewClick('kindEmployee')}
-            clicked={userReviews}
+            onClick={() => reviewClick("kindEmployee")}
+            $clicked={userReviews}
             label="kindEmployee"
           >
             상냥한 간호사·직원
@@ -265,8 +268,8 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
           <ReviewButton
-            onClick={() => reviewClick('goodReceipt')}
-            clicked={userReviews}
+            onClick={() => reviewClick("goodReceipt")}
+            $clicked={userReviews}
             label="goodReceipt"
           >
             편리한 접수·예약
@@ -275,8 +278,8 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
           <ReviewButton
-            onClick={() => reviewClick('cleanHospital')}
-            clicked={userReviews}
+            onClick={() => reviewClick("cleanHospital")}
+            $clicked={userReviews}
             label="cleanHospital"
           >
             깨끗한 시설
@@ -285,8 +288,8 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
           <ReviewButton
-            onClick={() => reviewClick('goodTraffic')}
-            clicked={userReviews}
+            onClick={() => reviewClick("goodTraffic")}
+            $clicked={userReviews}
             label="goodTraffic"
           >
             편한 교통·주차
@@ -295,6 +298,44 @@ export const HospitalInfo = () => {
             )}
           </ReviewButton>
         </ReviewContainer>
+        {hospitalData && hospitalData.wgs84Lat && hospitalData.wgs84Lon ? (
+          <Wrapper>
+            <Map
+              center={{
+                lat: hospitalData.wgs84Lat,
+                lng: hospitalData.wgs84Lon,
+              }} // 지도의 중심 좌표
+              style={{
+                width: "100%",
+                height: "100%",
+                zIndex: "1",
+              }}
+              level={3} // 지도 확대 레벨
+            >
+              <MapMarker
+                position={{
+                  lat: hospitalData.wgs84Lat,
+                  lng: hospitalData.wgs84Lon,
+                }}
+                image={{
+                  src: IconMapG,
+                  size: {
+                    width: 64,
+                    height: 69,
+                  }, // 마커이미지의 크기입니다
+                  options: {
+                    offset: {
+                      x: 27,
+                      y: 69,
+                    }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                  },
+                }}
+              />
+            </Map>
+          </Wrapper>
+        ) : (
+          <></>
+        )}
       </BottomContentContainer>
     </Container>
   );
@@ -413,7 +454,7 @@ const UnderLine = styled.div`
   border-bottom: 2px solid $ Colors.primary};
 `;
 
-const QueryMapBtn = styled.button`
+/*const QueryMapBtn = styled.button`
   cursor: pointer;
   display: none;
   margin-top: 20px;
@@ -431,6 +472,16 @@ const QueryMapBtn = styled.button`
   &:hover {
     opacity: 70%;
   }
+`;*/
+
+const Wrapper = styled.div`
+  width: 80%;
+  max-width: 834px;
+  margin: 15% auto;
+  text-align: center;
+  padding-bottom: 3%;
+  overflow: hidden;
+  height: 45vh;
 `;
 
 const BottomContentContainer = styled.div`
@@ -493,18 +544,18 @@ const ReviewContainer = styled.div`
 
 const ReviewButton = styled.button<ReviewButtonProps>`
   cursor: pointer;
-  background: ${({ clicked, label }) => {
-    if (clicked === label) {
+  background: ${({ $clicked, label }) => {
+    if ($clicked === label) {
       return Colors.primary;
     } else {
-      return '#f4f4f4';
+      return "#f4f4f4";
     }
   }};
-  color: ${({ clicked, label }) => {
-    if (clicked === label) {
-      return 'white';
+  color: ${({ $clicked, label }) => {
+    if ($clicked === label) {
+      return "white";
     } else {
-      return '#333333';
+      return "#333333";
     }
   }};
   border: 1px solid #00ad5c;
@@ -517,11 +568,11 @@ const ReviewButton = styled.button<ReviewButtonProps>`
   position: relative;
   text-align: start;
   span {
-    color: ${({ clicked, label }) => {
-      if (clicked === label) {
-        return 'white';
+    color: ${({ $clicked, label }) => {
+      if ($clicked === label) {
+        return "white";
       } else {
-        return '#333333';
+        return "#333333";
       }
     }};
     position: absolute;

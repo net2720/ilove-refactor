@@ -8,8 +8,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Colors } from "../constants/Colors";
 
-export const NavigationBar = () => {
-  const token = localStorage.getItem("token");
+export const NavigationBar = ({ token }: { token?: String | null }) => {
   let myPageLink;
 
   if (token) {
