@@ -25,9 +25,9 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   const ModalBtnProps = {
-    $btnFontSize: `${FontSize.h2}`,
-    $bgcolor: `${Colors.primary} !important`,
-    $borderOutLine: `${Colors.InputBorderOut} !important`,
+    btnFontSize: `${FontSize.h2}`,
+    bgcolor: `${Colors.primary} !important`,
+    borderOutLine: `${Colors.InputBorderOut} !important`,
     width: 'fit-content',
     height: 'fit-content',
     color: 'white',
