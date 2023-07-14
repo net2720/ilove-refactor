@@ -26,11 +26,21 @@ interface Latlng {
   lng: number | null;
 }
 
+interface User {
+  name: string;
+  phoneNumber: string;
+  email: string;
+  addr1: string;
+  addr2: string;
+  userLat: number;
+  userLon: number;
+}
+
 export const MyPage = () => {
   const token = localStorage.getItem('token');
 
   //유저 정보 상태 관리
-  const [originState, setOriginState] = useState({});
+  const [originState, setOriginState] = useState<User | null>(null);
   const [nameState, setNameState] = useState('');
   const [contectState, setContectState] = useState('');
   const [addr1State, setAddr1State] = useState('');
@@ -91,10 +101,12 @@ export const MyPage = () => {
   };
 
   const handleEditCancle = () => {
-    //@ts-ignore
-    setNameState(originState.name);
-    //@ts-ignore
-    setContectState(originState.phoneNumber);
+    if (originState && originState.name) {
+      setNameState(originState.name);
+    }
+    if (originState && originState.phoneNumber) {
+      setContectState(originState.phoneNumber);
+    }
     setIsEditing(false);
   };
 

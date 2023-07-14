@@ -104,7 +104,10 @@ export const ChangePWModal = React.forwardRef<ChangePWModalRef>(
             isOpen={true}
             onSaved={handleVerify}
           >
-            <LoginInput onChange={handleCurrentPW}></LoginInput>
+            <LoginInput
+              id="changePWInput"
+              onChange={handleCurrentPW}
+            ></LoginInput>
           </Modal>
         ) : (
           <></>
@@ -116,9 +119,9 @@ export const ChangePWModal = React.forwardRef<ChangePWModalRef>(
             isOpen={true}
             onSaved={handlePWChange}
           >
-            <LoginInput onChange={handleNewPW}></LoginInput>
+            <LoginInput id="newPWInput" onChange={handleNewPW}></LoginInput>
             <ModalTitle>{'비밀번호 확인'}</ModalTitle>
-            <LoginInput onChange={checkNewPW}></LoginInput>
+            <LoginInput id="checkNewPWInput" onChange={checkNewPW}></LoginInput>
           </Modal>
         ) : (
           <></>
@@ -200,7 +203,10 @@ export const DeleteUserModal = React.forwardRef<DeleteUserModalRef>(
             isOpen={true}
             onSaved={handleVerify}
           >
-            <LoginInput onChange={handleCurrentPW}></LoginInput>
+            <LoginInput
+              id="deleteUserInput"
+              onChange={handleCurrentPW}
+            ></LoginInput>
           </Modal>
         ) : (
           <></>
