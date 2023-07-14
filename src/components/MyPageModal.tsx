@@ -1,12 +1,12 @@
-import React, { useImperativeHandle, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Modal } from './Modal';
-import { instance } from '../services/Fetcher';
+import React, { useImperativeHandle, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Modal } from "./Modal";
+import { instance } from "../services/Fetcher";
 
-import 'react-toastify/dist/ReactToastify.css';
-import { toast, ToastContainer } from 'react-toastify';
-import { BorderColor, BorderRadius, FontSize } from '../constants/Index';
-import styled from 'styled-components';
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
+import { BorderColor, BorderRadius, FontSize } from "../constants/Index";
+import styled from "styled-components";
 
 export interface ChangePWModalRef {
   openModal: () => void;
@@ -19,10 +19,10 @@ export interface DeleteUserModalRef {
 export const ChangePWModal = React.forwardRef<ChangePWModalRef>(
   (props, ref) => {
     const [modalState, setModalState] = useState(false);
-    const [currentPWState, setCurrentPWState] = useState('');
+    const [currentPWState, setCurrentPWState] = useState("");
     const [verifiedPWState, setVerifiedPWState] = useState(false);
-    const [newPWState, setNewPWState] = useState('');
-    const [checkPWState, setCheckPWState] = useState('');
+    const [newPWState, setNewPWState] = useState("");
+    const [checkPWState, setCheckPWState] = useState("");
 
     //MyPage에서 최초로 Modal을 열 때 쓰임.
     useImperativeHandle(ref, () => ({
@@ -33,7 +33,7 @@ export const ChangePWModal = React.forwardRef<ChangePWModalRef>(
 
     //맨 처음 비밀번호를 확인하는 Modal을 여는 경우에 대한 핸들러들
     const firstHandleClose = () => {
-      setCurrentPWState('');
+      setCurrentPWState("");
       setModalState(false);
     };
 
@@ -43,21 +43,21 @@ export const ChangePWModal = React.forwardRef<ChangePWModalRef>(
 
     const handleVerify = async () => {
       try {
-        await instance.post('/users/ispasswordcorrect', {
+        await instance.post("/users/ispasswordcorrect", {
           password: currentPWState,
         });
         setVerifiedPWState(true);
         setModalState(false);
-        setCurrentPWState('');
+        setCurrentPWState("");
       } catch (err) {
-        toast('비밀번호가 일치하지 않습니다.');
+        toast("비밀번호가 일치하지 않습니다.");
       }
     };
 
     //비밀번호를 확인한 후 변경하는 두번째 모달에 대한 핸들러들
     const secondHandleClose = () => {
-      setNewPWState('');
-      setCheckPWState('');
+      setNewPWState("");
+      setCheckPWState("");
       setVerifiedPWState(false);
     };
 
@@ -70,20 +70,20 @@ export const ChangePWModal = React.forwardRef<ChangePWModalRef>(
     };
     const handlePWChange = async () => {
       if (newPWState.length < 4) {
-        toast('비밀번호는 최소 4글자 이상이어야 합니다.');
+        toast("비밀번호는 최소 4글자 이상이어야 합니다.");
       } else if (newPWState !== checkPWState) {
-        toast('새 비밀번호와 비밀번호 확인 칸이 일치하지 않습니다.');
+        toast("새 비밀번호와 비밀번호 확인 칸이 일치하지 않습니다.");
       } else {
         try {
-          await instance.patch('/users/update', {
+          await instance.patch("/users/update", {
             password: newPWState,
           });
-          setNewPWState('');
-          setCheckPWState('');
+          setNewPWState("");
+          setCheckPWState("");
           setVerifiedPWState(false);
-          toast('비밀번호 변경이 완료되었습니다.');
+          toast("비밀번호 변경이 완료되었습니다.");
         } catch (e) {
-          toast('비밀번호 변경 중 오류가 발생했습니다.');
+          toast("비밀번호 변경 중 오류가 발생했습니다.");
         }
       }
     };
@@ -104,7 +104,10 @@ export const ChangePWModal = React.forwardRef<ChangePWModalRef>(
             isOpen={true}
             onSaved={handleVerify}
           >
-            <LoginInput onChange={handleCurrentPW}></LoginInput>
+            <LoginInput
+              id="changePWInput"
+              onChange={handleCurrentPW}
+            ></LoginInput>
           </Modal>
         ) : (
           <></>
@@ -116,9 +119,9 @@ export const ChangePWModal = React.forwardRef<ChangePWModalRef>(
             isOpen={true}
             onSaved={handlePWChange}
           >
-            <LoginInput onChange={handleNewPW}></LoginInput>
-            <ModalTitle>{'비밀번호 확인'}</ModalTitle>
-            <LoginInput onChange={checkNewPW}></LoginInput>
+            <LoginInput id="newPWInput" onChange={handleNewPW}></LoginInput>
+            <ModalTitle>{"비밀번호 확인"}</ModalTitle>
+            <LoginInput id="checkNewPWInput" onChange={checkNewPW}></LoginInput>
           </Modal>
         ) : (
           <></>
@@ -131,7 +134,7 @@ export const ChangePWModal = React.forwardRef<ChangePWModalRef>(
 export const DeleteUserModal = React.forwardRef<DeleteUserModalRef>(
   (props, ref) => {
     const [modalState, setModalState] = useState(false);
-    const [currentPWState, setCurrentPWState] = useState('');
+    const [currentPWState, setCurrentPWState] = useState("");
     const [checkDeleteState, setCheckDeleteState] = useState(false);
 
     const navigate = useNavigate();
@@ -144,7 +147,7 @@ export const DeleteUserModal = React.forwardRef<DeleteUserModalRef>(
     }));
 
     const firstHandleClose = () => {
-      setCurrentPWState('');
+      setCurrentPWState("");
       setModalState(false);
     };
 
@@ -154,14 +157,14 @@ export const DeleteUserModal = React.forwardRef<DeleteUserModalRef>(
 
     const handleVerify = async () => {
       try {
-        await instance.post('/users/ispasswordcorrect', {
+        await instance.post("/users/ispasswordcorrect", {
           password: currentPWState,
         });
         setCheckDeleteState(true);
         setModalState(false);
-        setCurrentPWState('');
+        setCurrentPWState("");
       } catch (err) {
-        toast('비밀번호가 일치하지 않습니다.');
+        toast("비밀번호가 일치하지 않습니다.");
       }
     };
 
@@ -172,16 +175,16 @@ export const DeleteUserModal = React.forwardRef<DeleteUserModalRef>(
 
     const handleDelete = async () => {
       try {
-        await instance.delete('/users/delete');
-        toast('회원탈퇴가 정상적으로 완료되었습니다.');
+        await instance.delete("/users/delete");
+        toast("회원탈퇴가 정상적으로 완료되었습니다.");
         setCheckDeleteState(false);
-        localStorage.removeItem('token');
-        localStorage.removeItem('role');
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
         setTimeout(() => {
-          navigate('/');
+          navigate("/");
         }, 4000);
       } catch (e) {
-        toast('회원탈퇴 중 오류가 발생하였습니다.');
+        toast("회원탈퇴 중 오류가 발생하였습니다.");
       }
     };
     return (
@@ -200,7 +203,10 @@ export const DeleteUserModal = React.forwardRef<DeleteUserModalRef>(
             isOpen={true}
             onSaved={handleVerify}
           >
-            <LoginInput onChange={handleCurrentPW}></LoginInput>
+            <LoginInput
+              id="deleteUserInput"
+              onChange={handleCurrentPW}
+            ></LoginInput>
           </Modal>
         ) : (
           <></>
