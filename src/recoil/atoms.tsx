@@ -37,3 +37,11 @@ export const modifyHpNameAtom = atom({
   },
   effects_UNSTABLE: [persistAtom],
 });
+
+export const nearHospitalAtom = atom({
+  key: "nearHospitalAtom",
+  default: {
+    nearHospitalAtom: [],
+  },
+  effects_UNSTABLE: [persistAtom],
+});

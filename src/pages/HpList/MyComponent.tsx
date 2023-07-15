@@ -2,7 +2,12 @@ import React, { useState, useEffect, ReactNode } from "react";
 import VirtualScroll from "./VirtualScroll";
 import { instance } from "../../services/Fetcher";
 import { useRecoilState } from "recoil";
-import { hpNameAtom, latAtom, lngAtom } from "../../recoil/atoms";
+import {
+  hpNameAtom,
+  latAtom,
+  lngAtom,
+  nearHospitalAtom,
+} from "../../recoil/atoms";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -41,6 +46,8 @@ export const MyComponent: React.FC<MyComponentProps> = ({
   const [hasMore, setHasMore] = useState(true);
   const [hospitalNameInput] = useRecoilState(hpNameAtom);
   const distance = 3;
+  const [nearHospitalData, setNearHospitalData] =
+    useRecoilState(nearHospitalAtom);
 
   const Elem = ({ i, style }: ElemForm) => {
     const navigate = useNavigate();
@@ -111,7 +118,7 @@ export const MyComponent: React.FC<MyComponentProps> = ({
 
           if (response.data.success) {
             setScrollData(response.data.data);
-            console.log(response.data.data);
+            setNearHospitalData(response.data.data);
           }
         } catch (error) {
           console.error(error);

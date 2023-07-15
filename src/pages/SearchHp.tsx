@@ -6,7 +6,7 @@ import { BorderColor, BorderRadius } from "../constants/Border";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 import { useRecoilValue } from "recoil";
-import { latAtom, lngAtom } from "../recoil/atoms";
+import { latAtom, lngAtom, nearHospitalAtom } from "../recoil/atoms";
 import { IconMapG } from "../assets";
 
 import { NavigationBar } from "./Index";
@@ -24,15 +24,29 @@ interface HospitalData {
   id: number;
 }
 
+interface LatLon {
+  wgs84Lat: number;
+  wgs84Lon: number;
+  dutyName: string;
+  title: number;
+}
 export const SearchHp = () => {
   // HpListBox 가 화면에 보여진다면 true Y축 아래로 이동했다면 false
   const [listScrolled, setListScrolled] = useState(true);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const userLat = useRecoilValue(latAtom);
   const userLon = useRecoilValue(lngAtom);
-
+  const nearLatLon = useRecoilValue(nearHospitalAtom);
   // 로딩 화면
 
+  const positions = nearLatLon.map((data: LatLon, i: number) => ({
+    wgs84Lat: data.wgs84Lat,
+    wgs84Lon: data.wgs84Lon,
+    dutyName: data.dutyName,
+    title: i + 1,
+  }));
+
+  console.log(positions);
   // 애니메이션 발동 onClick 이벤트
   const handleSlideToggle = () => {
     setListScrolled((prev) => !prev);
@@ -51,22 +65,26 @@ export const SearchHp = () => {
           }}
           level={3} // 지도 확대 레벨
         >
-          <MapMarker
-            position={{ lat: userLat, lng: userLon }}
-            image={{
-              src: IconMapG,
-              size: {
-                width: 64,
-                height: 69,
-              }, // 마커이미지의 크기입니다
-              options: {
-                offset: {
-                  x: 27,
-                  y: 69,
-                }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-              },
-            }}
-          />
+          {positions.map((position: LatLon) => (
+            <MapMarker
+              position={{ lat: position.wgs84Lat, lng: position.wgs84Lon }}
+              key={position.title}
+              image={{
+                src: IconMapG,
+                size: {
+                  width: 44,
+                  height: 49,
+                },
+                options: {
+                  offset: {
+                    x: 27,
+                    y: 69,
+                  },
+                },
+              }}
+              title={position.dutyName}
+            />
+          ))}
         </Map>
         <HpListBox animate={!listScrolled}>
           <HpListHeaderBox>

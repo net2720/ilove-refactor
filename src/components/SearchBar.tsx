@@ -16,7 +16,7 @@ export const SearchBar = () => {
   ) => {
     const value = e.target.value;
     setKeyword(value);
-    console.log(keyword);
+
     await new Promise<void>((resolve): void => {
       setHpNameInput(value);
       resolve();
