@@ -3,14 +3,29 @@ import { FontSize } from "../constants/FontSize";
 import { FiSearch } from "react-icons/fi";
 import React, { useState } from "react";
 import { BorderRadius, BorderColor } from "../constants/Border";
+import { useRecoilState } from "recoil";
+import { hpNameAtom, modifyHpNameAtom } from "../recoil/atoms";
 
 export const SearchBar = () => {
   const [keyword, setKeyword] = useState("");
+  const [hpNameInput, setHpNameInput] = useRecoilState(hpNameAtom);
+  const [modifyHpName, setModifyHpName] = useRecoilState(modifyHpNameAtom);
 
-  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = e.target.value;
     setKeyword(value);
     console.log(keyword);
+    await new Promise<void>((resolve): void => {
+      setHpNameInput(value);
+      resolve();
+    });
+
+    await new Promise<void>((resolve): void => {
+      setModifyHpName(setKeyword);
+      resolve();
+    });
   };
 
   const handleSearchIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -22,6 +37,7 @@ export const SearchBar = () => {
     <>
       <SearchWrapper>
         <SearchInput
+          id="searchBarInput"
           type="text"
           placeholder="병원 이름을 검색해주세요"
           onChange={handleSearchInputChange}

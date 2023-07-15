@@ -2,26 +2,37 @@ import { styled, keyframes, css } from "styled-components";
 import { Header } from "../components/Header";
 import { useState } from "react";
 import { SmallCategories } from "../components/SmallCategories";
-import { CardBox } from "../components/CardBox";
 import { BorderColor, BorderRadius } from "../constants/Border";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 import { useRecoilValue } from "recoil";
 import { latAtom, lngAtom } from "../recoil/atoms";
 import { IconMapG } from "../assets";
+
+import { NavigationBar } from "./Index";
+import MyComponent from "./HpList/MyComponent";
+import { CardBox } from "../components/CardBox";
+
 // 애니메이션 발동을 위한 animate 타입 지정
 interface HpListBoxProps {
   animate: boolean;
 }
 
+interface HospitalData {
+  dutyName: string;
+  dutyAddr: string;
+  id: number;
+}
+
 export const SearchHp = () => {
   // HpListBox 가 화면에 보여진다면 true Y축 아래로 이동했다면 false
   const [listScrolled, setListScrolled] = useState(true);
-
+  const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const userLat = useRecoilValue(latAtom);
   const userLon = useRecoilValue(lngAtom);
-  console.log(userLat);
-  console.log(userLon);
+
+  // 로딩 화면
+
   // 애니메이션 발동 onClick 이벤트
   const handleSlideToggle = () => {
     setListScrolled((prev) => !prev);
@@ -70,19 +81,11 @@ export const SearchHp = () => {
             </HpListHeaderContent>
           </HpListHeaderBox>
           <HpDetailBox>
-            <CardBox>
-              <HpNumberBox>
-                <HpNumber>1</HpNumber>
-              </HpNumberBox>
-              <HpContentBox>
-                <span>병원 이름자리</span>
-                <span>병원 주소자리</span>
-              </HpContentBox>
-              <HpImageBox></HpImageBox>
-            </CardBox>
+            <MyComponent userLat={userLat} userLon={userLon} />
           </HpDetailBox>
         </HpListBox>
       </Wrapper>
+      <NavigationBar />
     </>
   );
 };
@@ -162,39 +165,4 @@ const HpListHeaderContent = styled.div`
 const HpDetailBox = styled.div`
   width: 100%;
   height: 80%;
-`;
-
-// 병원 리스트의 순서를 담을 박스
-const HpNumberBox = styled.div`
-  width: 10%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-// 병원 리스트에서 상세정보를 담을 박스
-const HpContentBox = styled.div`
-  width: 80%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-evenly;
-`;
-
-// 병원 리스트에서 이미지를 담을 박스
-const HpImageBox = styled.div`
-  width: 10%;
-  height: 100%;
-`;
-
-// 병원 리스트 번호
-const HpNumber = styled.div`
-  width: 30%;
-  height: 30%;
-  border: 1px solid grey;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;

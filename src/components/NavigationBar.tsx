@@ -14,7 +14,7 @@ export const NavigationBar = () => {
 
   if (token) {
     myPageLink = "/myPage";
-  } else myPageLink = "/";
+  } else myPageLink = "/login";
   return (
     <>
       <Nav>
