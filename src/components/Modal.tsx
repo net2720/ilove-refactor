@@ -49,24 +49,26 @@ export const Modal: React.FC<ModalProps> = ({
             >
               <Style.ModalTitle>
                 <span>{title}</span>
+                <div>
+                  {children}
+                  <Style.ButtonGridBox>
+                    <Style.ModalNorBtn
+                      {...ModalBtnProps}
+                      label={"닫기"}
+                      onClick={closeModalHandler}
+                    >
+                      닫기
+                    </Style.ModalNorBtn>
+                    <Style.ModalBtn
+                      {...ModalBtnProps}
+                      label={"확인"}
+                      onClick={onSaveHandler}
+                    >
+                      확인
+                    </Style.ModalBtn>
+                  </Style.ButtonGridBox>
+                </div>
               </Style.ModalTitle>
-              <div>{children}</div>
-              <div>
-                <Style.ModalBtn
-                  {...ModalBtnProps}
-                  label={"닫기"}
-                  onClick={closeModalHandler}
-                >
-                  닫기
-                </Style.ModalBtn>
-                <Style.ModalBtn
-                  {...ModalBtnProps}
-                  label={"확인"}
-                  onClick={onSaveHandler}
-                >
-                  확인
-                </Style.ModalBtn>
-              </div>
             </Style.ModalView>
           </Style.ModalBackdrop>
         )}
