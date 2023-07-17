@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
 
 import { BorderRadius, Colors, FontSize } from "../constants/Index";
-import { CardBox, Container } from "../components/Index";
+import { CardBox, Container, NavigationBar } from "../components/Index";
 
 import { BasicButton, DeleteButton, ChangePWModal } from "../components/Index";
 import { instance } from "../services/Fetcher";
@@ -260,6 +260,7 @@ export const MyPage = () => {
           </Modal>
         </ModalContainer>
       )}
+      <NavigationBar />
     </Container>
   );
 };

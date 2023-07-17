@@ -85,7 +85,6 @@ const App: React.FC = () => {
               }
             ></Route>
           </Routes>
-          <NavigationBar />
         </Container>
       </RecoilRoot>
     </>

@@ -5,6 +5,7 @@ import { FontSize } from "../constants/FontSize";
 import { Colors } from "../constants/Colors";
 import { LoginValidated } from "../utils";
 import { Link } from "react-router-dom";
+import { NavigationBar } from "./Index";
 
 export const Login = () => {
   return (
@@ -27,6 +28,7 @@ export const Login = () => {
             </Link>
           </LoginUl>
         </Div>
+        <NavigationBar />
       </Container>
     </>
   );

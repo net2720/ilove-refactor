@@ -21,3 +21,27 @@ export const lngAtom = atom({
   },
   effects_UNSTABLE: [persistAtom],
 });
+
+export const hpNameAtom = atom({
+  key: "hpNameAtom",
+  default: {
+    hpNameAtom: "",
+  },
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const modifyHpNameAtom = atom({
+  key: "modifyHpNameAtom",
+  default: {
+    modifyHpNameAtom: [],
+  },
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const nearHospitalAtom = atom({
+  key: "nearHospitalAtom",
+  default: {
+    nearHospitalAtom: [],
+  },
+  effects_UNSTABLE: [persistAtom],
+});

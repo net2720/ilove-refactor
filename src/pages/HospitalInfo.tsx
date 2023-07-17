@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
+
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { IconMapG } from "../assets";
 
@@ -15,7 +16,7 @@ import smileGreen from "../assets/smileGreen.svg";
 import IconLeft from "../assets/iconLeft.svg";
 import { instance } from "../services/Fetcher";
 
-import { Container, SmallCategories } from "../components/Index";
+import { Container, NavigationBar, SmallCategories } from "../components/Index";
 
 import { Colors, FontSize } from "../constants/Index";
 
@@ -337,6 +338,7 @@ export const HospitalInfo = () => {
           <></>
         )}
       </BottomContentContainer>
+      <NavigationBar />
     </Container>
   );
 };

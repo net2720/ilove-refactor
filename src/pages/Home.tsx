@@ -22,7 +22,7 @@ import { toast, ToastContainer } from "react-toastify";
 //import Loding from '../assets/ImgLoding.jpg';
 import newLogo from "../assets/newLogo.jpg";
 
-import { Container, SearchBar } from "../components/Index";
+import { Container, NavigationBar, SearchBar } from "../components/Index";
 
 import { Colors } from "../constants/Colors";
 //import { FontSize } from '../constants/FontSize';
@@ -106,6 +106,7 @@ export const Home = () => {
         <SearchBar />
 
         <MainBannerImg />
+        <NavigationBar />
       </Container>
     </>
   );
