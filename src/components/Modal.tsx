@@ -1,8 +1,8 @@
-import * as Style from './styles/ModalStyle';
+import * as Style from "./styles/ModalStyle";
 
 // 상수로 뽑아둔 color, fontSize 연결 링크
-import { Colors } from '../constants/Colors';
-import { FontSize } from '../constants/FontSize';
+import { Colors } from "../constants/Colors";
+import { FontSize } from "../constants/FontSize";
 
 interface ModalProps {
   title?: string;
@@ -25,12 +25,12 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   const ModalBtnProps = {
-    btnFontSize: `${FontSize.h2}`,
-    bgcolor: `${Colors.primary} !important`,
-    borderOutLine: `${Colors.InputBorderOut} !important`,
-    width: 'fit-content',
-    height: 'fit-content',
-    color: 'white',
+    $btnFontSize: `${FontSize.h2}`,
+    $bgcolor: `${Colors.primary} !important`,
+    $borderOutLine: `${Colors.InputBorderOut} !important`,
+    width: "fit-content",
+    height: "fit-content",
+    color: "white",
   };
 
   const closeModalHandler = () => {
@@ -54,14 +54,14 @@ export const Modal: React.FC<ModalProps> = ({
               <div>
                 <Style.ModalBtn
                   {...ModalBtnProps}
-                  label={'닫기'}
+                  label={"닫기"}
                   onClick={closeModalHandler}
                 >
                   닫기
                 </Style.ModalBtn>
                 <Style.ModalBtn
                   {...ModalBtnProps}
-                  label={'확인'}
+                  label={"확인"}
                   onClick={onSaveHandler}
                 >
                   확인

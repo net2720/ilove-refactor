@@ -132,7 +132,7 @@ const MainBannerImg = () => {
     <BannerCon>
       <Slider {...settings}>
         {images.map((img) => (
-          <BannerImg src={img.img} alt={img.img} />
+          <BannerImg key={img.img} src={img.img} alt={img.img} />
         ))}
       </Slider>
     </BannerCon>
