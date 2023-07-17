@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
-import styled from 'styled-components';
-import { Colors, FontSize, BorderRadius } from '../constants/Index';
+import React, { ReactNode } from "react";
+import styled from "styled-components";
+import { Colors, FontSize, BorderRadius } from "../constants/Index";
 
 export interface BasicButtonProps {
   //linkTo? : string;
@@ -33,7 +33,7 @@ export const DeleteButton: React.FC<BasicButtonProps> = ({
 };
 
 export const StyledButton = styled.button<BasicButtonProps>`
-  padding: ${(props) => (props.small ? '2%' : '5%')};
+  padding: ${(props) => (props.small ? "2%" : "5%")};
   background-color: ${Colors.primary};
   color: white;
   width: 100%;
@@ -42,12 +42,12 @@ export const StyledButton = styled.button<BasicButtonProps>`
 `;
 
 export const StyledDeleteButton = styled.button<BasicButtonProps>`
-  padding: ${(props) => (props.small ? '2%' : '5%')};
-  background-color: ${Colors.InputBorderInFont};
-  color: #666666;
+  padding: ${(props) => (props.small ? "2%" : "5%")};
+  background-color: ${Colors.cancleAndDelete};
+  color: white;
   width: 100%;
   font-size: ${FontSize.h2};
-  border: 1px solid ${Colors.InputBorderInFont};
+  border: 1px solid ${Colors.cancleAndDelete};
 `;
 
 export const JoinButton = styled.button`

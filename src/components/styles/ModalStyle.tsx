@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-
+import styled from "styled-components";
 // 공통 컴포넌트 스타일 불러오기
-import { CardBoxStyle } from '../CardBox';
-import { StyledButton } from '../BasicButton';
+import { CardBoxStyle } from "../CardBox";
+import { BasicButton, DeleteButton } from "../Index";
+import { BorderRadius } from "../../constants/Border";
 
 interface ModalViewProps {
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
@@ -30,7 +30,6 @@ export const ModalBackdrop = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
   top: 0;
   left: 0;
   right: 0;
@@ -49,10 +48,24 @@ export const ModalTitle = styled.div`
   }
 `;
 
-export const ModalBtn = styled(StyledButton)<ModalBtnProps>`
-  margin: 1% 2%;
+export const ModalBtn = styled(BasicButton)<ModalBtnProps>`
+  margin: 2% 2%;
+  padding: 1%;
+`;
+
+export const ModalNorBtn = styled(DeleteButton)<ModalBtnProps>`
+  margin: 2% 2%;
+  padding: 1%;
 `;
 
 export const ModalView = styled(CardBoxStyle)<ModalViewProps>`
-  width: 833px;
+  width: 60%;
+  height: 55%;
+  border-radius: ${BorderRadius.SearchRadius};
+`;
+
+export const ButtonGridBox = styled.div`
+  margin-top: 3%;
+  display: grid;
+  grid-gap: 5%;
 `;
