@@ -1,0 +1,7 @@
+{
+  "workbench.colorTheme": "FlatUI",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "eslint.codeActionsOnSave.rules": null,
+  "vs-code-prettier-eslint.prettierLast": true
+}
