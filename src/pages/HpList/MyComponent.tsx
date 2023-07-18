@@ -95,8 +95,6 @@ export const MyComponent: React.FC<MyComponentProps> = ({
             setScrollData(response.data.data);
             console.log(response.data.data);
           }
-        } else if (!hospitalNameInput) {
-          setScrollData([]);
         }
       } catch (error) {}
     };
