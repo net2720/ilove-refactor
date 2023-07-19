@@ -20,6 +20,7 @@ export const SearchBar = () => {
 
   const handleSearchIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     console.log("Input value:", keyword);
   };
 
