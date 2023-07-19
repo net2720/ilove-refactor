@@ -1,4 +1,4 @@
-import { styled, keyframes, css } from "styled-components";
+import { styled, css } from "styled-components";
 import { Header } from "../components/Header";
 import { useState } from "react";
 import { SmallCategories } from "../components/SmallCategories";
@@ -11,20 +11,13 @@ import { IconMapG } from "../assets";
 
 import { NavigationBar } from "./Index";
 import MyComponent from "./HpList/MyComponent";
-import { CardBox } from "../components/CardBox";
 
 // 애니메이션 발동을 위한 animate 타입 지정
 interface HpListBoxProps {
-  animate: boolean;
+  animate: string;
 }
 
-interface HospitalData {
-  dutyName: string;
-  dutyAddr: string;
-  id: number;
-}
-
-interface LatLon {
+export interface LatLon {
   wgs84Lat: number;
   wgs84Lon: number;
   dutyName: string;
@@ -33,21 +26,23 @@ interface LatLon {
 export const SearchHp = () => {
   // HpListBox 가 화면에 보여진다면 true Y축 아래로 이동했다면 false
   const [listScrolled, setListScrolled] = useState(true);
-  const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
+
   const userLat = useRecoilValue(latAtom);
   const userLon = useRecoilValue(lngAtom);
   const nearLatLon = useRecoilValue(nearHospitalAtom);
   // 로딩 화면
 
-  const positions = nearLatLon.map((data: LatLon, i: number) => ({
-    wgs84Lat: data.wgs84Lat,
-    wgs84Lon: data.wgs84Lon,
-    dutyName: data.dutyName,
-    title: i + 1,
-  }));
+  const positions =
+    nearLatLon?.map((data: LatLon, i: number) => ({
+      wgs84Lat: data.wgs84Lat,
+      wgs84Lon: data.wgs84Lon,
+      dutyName: data.dutyName,
+      title: i + 1,
+    })) ?? [];
 
   console.log(positions);
   // 애니메이션 발동 onClick 이벤트
+
   const handleSlideToggle = () => {
     setListScrolled((prev) => !prev);
   };
@@ -86,7 +81,7 @@ export const SearchHp = () => {
             />
           ))}
         </Map>
-        <HpListBox animate={!listScrolled}>
+        <HpListBox animate={listScrolled.toString()}>
           <HpListHeaderBox>
             <SlideBtn onClick={handleSlideToggle} />
             <HpListHeaderContent>
@@ -118,18 +113,10 @@ const Wrapper = styled.div`
   height: 90vh;
 `;
 
-// 버튼 클릭 시 Y축으로 HpList 박스 이동
-const slideAnimation = keyframes`
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(75%);
-  }
-`;
-
 // 헤더 ~네비게이션 사이 전체 박스
-const HpListBox = styled.div<HpListBoxProps>`
+const HpListBox = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "animate", // "animate" 프롭을 제외한 나머지 프롭만 전달
+})<HpListBoxProps>`
   width: 100%;
   height: 84%;
   margin: 5% auto 0% auto;
@@ -141,11 +128,8 @@ const HpListBox = styled.div<HpListBoxProps>`
   position: relative;
   bottom: 90%;
   z-index: 99;
-  animation: ${({ animate }) =>
-    animate &&
-    css`
-      ${slideAnimation} 0.5s forwards
-    `};
+  transition: transform 0.3s ease;
+  transform: translateY(${(props) => (props.animate === "true" ? "0" : "75%")});
 `;
 
 // HpListBox 내의 헤더 즉 상단 박스
