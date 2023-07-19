@@ -17,7 +17,7 @@ interface HpListBoxProps {
   animate: string;
 }
 
-interface LatLon {
+export interface LatLon {
   wgs84Lat: number;
   wgs84Lon: number;
   dutyName: string;
@@ -32,12 +32,13 @@ export const SearchHp = () => {
   const nearLatLon = useRecoilValue(nearHospitalAtom);
   // 로딩 화면
 
-  const positions = nearLatLon.map((data: LatLon, i: number) => ({
-    wgs84Lat: data.wgs84Lat,
-    wgs84Lon: data.wgs84Lon,
-    dutyName: data.dutyName,
-    title: i + 1,
-  }));
+  const positions =
+    nearLatLon?.map((data: LatLon, i: number) => ({
+      wgs84Lat: data.wgs84Lat,
+      wgs84Lon: data.wgs84Lon,
+      dutyName: data.dutyName,
+      title: i + 1,
+    })) ?? [];
 
   console.log(positions);
   // 애니메이션 발동 onClick 이벤트

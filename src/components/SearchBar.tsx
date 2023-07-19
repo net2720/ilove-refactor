@@ -11,21 +11,11 @@ export const SearchBar = () => {
   const [hpNameInput, setHpNameInput] = useRecoilState(hpNameAtom);
   const [modifyHpName, setModifyHpName] = useRecoilState(modifyHpNameAtom);
 
-  const handleSearchInputChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setKeyword(value);
-
-    await new Promise<void>((resolve): void => {
-      setHpNameInput(value);
-      resolve();
-    });
-
-    await new Promise<void>((resolve): void => {
-      setModifyHpName(setKeyword);
-      resolve();
-    });
+    setHpNameInput(value);
+    setModifyHpName(value);
   };
 
   const handleSearchIconClick = (e: React.MouseEvent<HTMLButtonElement>) => {

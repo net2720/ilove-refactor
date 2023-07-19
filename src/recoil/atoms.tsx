@@ -1,6 +1,6 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
-
+import { LatLon } from "../pages/SearchHp";
 const { persistAtom } = recoilPersist({
   key: "sessionStorage", //원하는 key 값 입력
   storage: sessionStorage,
@@ -38,10 +38,8 @@ export const modifyHpNameAtom = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
-export const nearHospitalAtom = atom({
+export const nearHospitalAtom = atom<LatLon[]>({
   key: "nearHospitalAtom",
-  default: {
-    nearHospitalAtom: [],
-  },
+  default: [],
   effects_UNSTABLE: [persistAtom],
 });
