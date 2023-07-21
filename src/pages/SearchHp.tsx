@@ -31,7 +31,7 @@ export const SearchHp = () => {
   const userLon = useRecoilValue(lngAtom);
   const nearLatLon = useRecoilValue(nearHospitalAtom);
   // 로딩 화면
-
+  console.log(userLat);
   const positions =
     nearLatLon?.map((data: LatLon, i: number) => ({
       wgs84Lat: data.wgs84Lat,
