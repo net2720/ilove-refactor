@@ -1,5 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import React, { useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 import styled from "styled-components";
 import { FontSize } from "./constants/FontSize";
 import { BorderRadius, BorderColor } from "./constants/Border";
@@ -9,6 +9,7 @@ import { instance } from "./services/Fetcher";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { latAtom, lngAtom } from "./recoil/atoms";
+import { useMutation } from "react-query";
 
 interface IFormInput {
   email: string;
@@ -58,8 +59,32 @@ export const LoginValidated = () => {
     }
   };
 
-  const handleLogin = () => {
-    handleSubmit(onSubmit);
+  const onSubmitWrapper = (data: IFormInput) => {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        onSubmit(data);
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const mutationKey = "loginMutation";
+
+  const { mutate } = useMutation(mutationKey, onSubmitWrapper);
+
+  const handleLogin = (data: { email: string; pw: string }) => {
+    mutate({
+      email: data.email,
+      pw: data.pw,
+    });
+  };
+
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    handleSubmit((data: IFormInput) => {
+      handleLogin(data);
+    })(event);
   };
   return (
     <>
@@ -94,7 +119,7 @@ export const LoginValidated = () => {
         {errors?.pw ? <ErrorMessage>{errors.pw?.message}</ErrorMessage> : null}
 
         <LoginBtn>
-          <JoinButton onClick={handleLogin}>로그인</JoinButton>
+          <JoinButton onClick={handleClick}>로그인</JoinButton>
         </LoginBtn>
       </LoginForm>
     </>
@@ -175,6 +200,7 @@ export const SignUpValidated = () => {
     }
   };
 
+  const { mutate } = useMutation(handleSignUp);
   return (
     <>
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
@@ -251,7 +277,13 @@ export const SignUpValidated = () => {
 
         <Post getAddrData={getAddrData} />
         <LoginBtn>
-          <JoinButton onClick={handleSignUp}>회원가입</JoinButton>
+          <JoinButton
+            onClick={() => {
+              mutate();
+            }}
+          >
+            회원가입
+          </JoinButton>
         </LoginBtn>
       </LoginForm>
     </>
