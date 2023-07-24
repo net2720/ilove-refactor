@@ -9,7 +9,8 @@ import { instance } from "./services/Fetcher";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { latAtom, lngAtom } from "./recoil/atoms";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
+import axios, { AxiosError } from "axios";
 
 interface IFormInput {
   email: string;
@@ -35,56 +36,49 @@ export const LoginValidated = () => {
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    try {
-      const response = await instance.post("users/login", {
+  // const mutationKey = "loginMutation";
+
+  // const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (data: IFormInput) =>
+      instance.post("users/login", {
         email: data.email,
         password: data.pw,
-      });
-      console.log(response);
-      setUserLat(response.data.data.userLat);
-      setUserLon(response.data.data.userLon);
+      }),
+    {
+      onError: (error: any) => {
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError<any>;
+          alert(axiosError.response?.data.error.message);
+        }
+      },
+      onSuccess: (response) => {
+        const data = response.data.data; // axios 응답에서 데이터 추출
+        console.log(data);
 
-      const role = response.data.data.role;
-      const token = response.data.data.token;
+        setUserLat(data.userLat);
+        setUserLon(data.userLon);
 
-      console.log("role", role);
-      console.log("token", token);
-      localStorage.setItem("role", role);
-      localStorage.setItem("token", token);
+        const role = data.role;
+        const token = data.token;
 
-      navigate("/");
-    } catch (error) {
-      console.log(error);
+        localStorage.setItem("role", role);
+        localStorage.setItem("token", token);
+
+        navigate("/");
+      },
+      // onSettled: () => {
+      //   queryClient.invalidateQueries(mutationKey);
+      // },
     }
-  };
+  );
 
-  const onSubmitWrapper = (data: IFormInput) => {
-    return new Promise<void>((resolve, reject) => {
-      try {
-        onSubmit(data);
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
-    });
-  };
-
-  const mutationKey = "loginMutation";
-
-  const { mutate } = useMutation(mutationKey, onSubmitWrapper);
-
-  const handleLogin = (data: { email: string; pw: string }) => {
-    mutate({
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    mutation.mutate({
       email: data.email,
       pw: data.pw,
     });
-  };
-
-  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
-    handleSubmit((data: IFormInput) => {
-      handleLogin(data);
-    })(event);
   };
   return (
     <>
@@ -119,7 +113,7 @@ export const LoginValidated = () => {
         {errors?.pw ? <ErrorMessage>{errors.pw?.message}</ErrorMessage> : null}
 
         <LoginBtn>
-          <JoinButton onClick={handleClick}>로그인</JoinButton>
+          <JoinButton>로그인</JoinButton>
         </LoginBtn>
       </LoginForm>
     </>
@@ -195,8 +189,8 @@ export const SignUpValidated = () => {
       });
 
       navigate("/login");
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      alert(error.response.data.error.message);
     }
   };
 
