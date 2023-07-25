@@ -55,7 +55,6 @@ export const LoginValidated = () => {
       },
       onSuccess: (response) => {
         const data = response.data.data; // axios 응답에서 데이터 추출
-        console.log(data);
 
         setUserLat(data.userLat);
         setUserLon(data.userLon);

@@ -2,20 +2,17 @@ import React, { useState, useEffect, ReactNode } from "react";
 import VirtualScroll from "./VirtualScroll";
 import { instance } from "../../services/Fetcher";
 import { useRecoilState } from "recoil";
-import {
-  hpNameAtom,
-  latAtom,
-  lngAtom,
-  nearHospitalAtom,
-} from "../../recoil/atoms";
+import { hpNameAtom, nearHospitalAtom } from "../../recoil/atoms";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "react-query";
+import { LatLon } from "../SearchHp";
 
 interface ElemForm {
   i: number;
   style: Element;
 }
-export interface ScrollDataForm {
+export interface ScrollDataForm extends LatLon {
   dutyName: string;
   dutyAddr: string;
   id: number;
@@ -44,7 +41,7 @@ export const MyComponent: React.FC<MyComponentProps> = ({
 }) => {
   const [scrollData, setScrollData] = useState<ScrollDataForm[]>([]);
   const [hasMore, setHasMore] = useState(true);
-  const [hospitalNameInput] = useRecoilState(hpNameAtom);
+  const [hospitalNameInput, setHospitalNameInput] = useRecoilState(hpNameAtom);
   const distance = 3;
   const [nearHospitalData, setNearHospitalData] =
     useRecoilState(nearHospitalAtom);
@@ -53,6 +50,7 @@ export const MyComponent: React.FC<MyComponentProps> = ({
     const navigate = useNavigate();
     const handleLinkClick = () => {
       navigate(`/hospitalInfo?id=${scrollData[i].id}`);
+      setHospitalNameInput("");
     };
 
     return (
@@ -84,50 +82,36 @@ export const MyComponent: React.FC<MyComponentProps> = ({
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (hospitalNameInput) {
-          const response = await instance.get(
-            `/hospital/hp10/${hospitalNameInput}?size=10&page=1`
-          );
+    setHospitalNameInput("");
+  }, []);
 
-          if (response.data.success) {
-            setScrollData(response.data.data);
-            console.log(response.data.data);
-          }
-        }
-      } catch (error) {}
-    };
-
-    fetchData();
-  }, [hospitalNameInput]);
-
-  useEffect(() => {
-    if (!hospitalNameInput) {
-      const hospitalApi = async () => {
-        try {
-          const response = await instance.get("/hospital/near", {
-            params: {
-              userLat: userLat,
-              userLon: userLon,
-              r: distance,
-            },
-          });
-
-          if (response.data.success) {
-            setScrollData(response.data.data);
-            setNearHospitalData(response.data.data);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      //위도와 경도에 유효한 값이 있는 경우에만 API를 호출합니다.
-      if (userLat !== null && userLon !== null) {
-        hospitalApi();
+  const { data } = useQuery<ScrollDataForm[]>(
+    ["hpList", hospitalNameInput],
+    async () => {
+      if (hospitalNameInput) {
+        const response = await instance.get(
+          `/hospital/hp10/${hospitalNameInput}?size=10&page=1`
+        );
+        setScrollData(response.data.data);
+        return response.data.data;
+      } else {
+        const response = await instance.get("/hospital/near", {
+          params: {
+            userLat: userLat,
+            userLon: userLon,
+            r: distance,
+          },
+        });
+        setScrollData(response.data.data);
+        setNearHospitalData(response.data.data);
+        return response.data.data;
       }
+    },
+    {
+      enabled: hospitalNameInput.length >= 0,
+      staleTime: 1000,
     }
-  }, [hospitalNameInput]);
+  );
 
   const fetchMoreData = async () => {
     let page = 0;
