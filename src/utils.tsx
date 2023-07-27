@@ -1,5 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { FontSize } from "./constants/FontSize";
 import { BorderRadius, BorderColor } from "./constants/Border";

@@ -5,8 +5,9 @@ import { useRecoilState } from "recoil";
 import { hpNameAtom, nearHospitalAtom } from "../../recoil/atoms";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { LatLon } from "../SearchHp";
+import { useGeolocation } from "../useGeolocation";
 
 interface ElemForm {
   i: number;
@@ -24,12 +25,6 @@ export interface ScrollDataForm extends LatLon {
   };
   length: number;
 }
-
-// export interface rowRendererForm {
-//   index: number;
-//   key: React.Key;
-//   style: Element;
-// }
 
 interface MyComponentProps {
   userLat: number;
@@ -85,8 +80,12 @@ export const MyComponent: React.FC<MyComponentProps> = ({
     setHospitalNameInput("");
   }, []);
 
-  const { data } = useQuery<ScrollDataForm[]>(
-    ["hpList", hospitalNameInput],
+  const location = useGeolocation();
+  const token = localStorage.getItem("token");
+  console.log("내위치", location.coordinates?.lat, location.coordinates?.lng);
+
+  const { data, isLoading } = useQuery<ScrollDataForm[]>(
+    ["hpList", hospitalNameInput, location.coordinates?.lng],
     async () => {
       if (hospitalNameInput) {
         const response = await instance.get(
@@ -95,16 +94,30 @@ export const MyComponent: React.FC<MyComponentProps> = ({
         setScrollData(response.data.data);
         return response.data.data;
       } else {
-        const response = await instance.get("/hospital/near", {
-          params: {
-            userLat: userLat,
-            userLon: userLon,
-            r: distance,
-          },
-        });
-        setScrollData(response.data.data);
-        setNearHospitalData(response.data.data);
-        return response.data.data;
+        if (token) {
+          const response = await instance.get("/hospital/near", {
+            params: {
+              userLat: userLat,
+              userLon: userLon,
+              r: distance,
+            },
+          });
+          setScrollData(response.data.data);
+          setNearHospitalData(response.data.data);
+          return response.data.data;
+        } else {
+          const response = await instance.get("/hospital/near", {
+            params: {
+              userLat: location.coordinates?.lat,
+              userLon: location.coordinates?.lng,
+              r: distance,
+            },
+          });
+          setScrollData(response.data.data);
+          setNearHospitalData(response.data.data);
+          console.log(response);
+          return response.data.data;
+        }
       }
     },
     {
@@ -146,6 +159,8 @@ export const MyComponent: React.FC<MyComponentProps> = ({
   /*지정된 병원을 div 같은 것으로 심어주면 될 것 같습니다.
   여기서 div 같은 걸로 심는 것 보다는 가입 페이지에
   인풋 태그나 그런걸 하나 만들어서 거기에 담아주는 편이 좋을 것 같네요.*/
+
+  if (isLoading) return <div>잠시만 기다려주세요</div>;
   return (
     <>
       <VirtualScroll
