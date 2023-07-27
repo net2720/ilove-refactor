@@ -1,5 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import React, { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { FontSize } from "./constants/FontSize";
 import { BorderRadius, BorderColor } from "./constants/Border";
@@ -10,7 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { latAtom, lngAtom } from "./recoil/atoms";
 import { useMutation } from "react-query";
-
+import axios, { AxiosError } from "axios";
+import { toast, ToastContainer } from "react-toastify";
 interface IFormInput {
   email: string;
   pw: string;
@@ -35,59 +36,55 @@ export const LoginValidated = () => {
     mode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    try {
-      const response = await instance.post("users/login", {
+  // const mutationKey = "loginMutation";
+
+  // const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (data: IFormInput) =>
+      instance.post("users/login", {
         email: data.email,
         password: data.pw,
-      });
-      console.log(response);
-      setUserLat(response.data.data.userLat);
-      setUserLon(response.data.data.userLon);
+      }),
+    {
+      onError: (error: any) => {
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError<any>;
+          toast.error(axiosError.response?.data.error.message);
+        }
+      },
+      onSuccess: (response) => {
+        const data = response.data.data; // axios 응답에서 데이터 추출
 
-      const role = response.data.data.role;
-      const token = response.data.data.token;
+        setUserLat(data.userLat);
+        setUserLon(data.userLon);
 
-      console.log("role", role);
-      console.log("token", token);
-      localStorage.setItem("role", role);
-      localStorage.setItem("token", token);
+        const role = data.role;
+        const token = data.token;
 
-      navigate("/");
-    } catch (error) {
-      console.log(error);
+        localStorage.setItem("role", role);
+        localStorage.setItem("token", token);
+
+        navigate("/");
+      },
     }
-  };
+  );
 
-  const onSubmitWrapper = (data: IFormInput) => {
-    return new Promise<void>((resolve, reject) => {
-      try {
-        onSubmit(data);
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
-    });
-  };
-
-  const mutationKey = "loginMutation";
-
-  const { mutate } = useMutation(mutationKey, onSubmitWrapper);
-
-  const handleLogin = (data: { email: string; pw: string }) => {
-    mutate({
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    mutation.mutate({
       email: data.email,
       pw: data.pw,
     });
   };
-
-  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
-    handleSubmit((data: IFormInput) => {
-      handleLogin(data);
-    })(event);
-  };
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        closeButton={false}
+        autoClose={4000}
+        hideProgressBar
+      />
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
         <InputTitle>이메일</InputTitle>
         <LoginInput
@@ -107,6 +104,7 @@ export const LoginValidated = () => {
 
         <InputTitle>비밀번호</InputTitle>
         <LoginInput
+          type="password"
           {...register("pw", {
             required: "비밀번호를 입력해주세요",
             minLength: {
@@ -119,7 +117,7 @@ export const LoginValidated = () => {
         {errors?.pw ? <ErrorMessage>{errors.pw?.message}</ErrorMessage> : null}
 
         <LoginBtn>
-          <JoinButton onClick={handleClick}>로그인</JoinButton>
+          <JoinButton>로그인</JoinButton>
         </LoginBtn>
       </LoginForm>
     </>
@@ -195,14 +193,21 @@ export const SignUpValidated = () => {
       });
 
       navigate("/login");
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      toast(error.response.data.error.message);
     }
   };
 
   const { mutate } = useMutation(handleSignUp);
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        closeButton={false}
+        autoClose={4000}
+        hideProgressBar
+      />
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
         <InputTitle>이름</InputTitle>
         <LoginInput
@@ -249,6 +254,7 @@ export const SignUpValidated = () => {
 
         <InputTitle>비밀번호</InputTitle>
         <LoginInput
+          type="password"
           {...register("pw", {
             required: "비밀번호를 입력해주세요",
             minLength: {
@@ -262,6 +268,7 @@ export const SignUpValidated = () => {
 
         <InputTitle>비밀번호 확인</InputTitle>
         <LoginInput
+          type="password"
           {...register("checkPw", {
             required: "비밀번호를 확인해주세요",
             minLength: {

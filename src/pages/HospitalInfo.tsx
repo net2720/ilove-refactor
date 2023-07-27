@@ -134,7 +134,7 @@ export const HospitalInfo = () => {
     return (
       <>
         <HeaderWrap>
-          <BtnBack onClick={() => navigate("/search")}>
+          <BtnBack onClick={() => navigate("/searchHp")}>
             <img alt="icon-left" src={IconLeft}></img>
           </BtnBack>
           <HeaderName>

@@ -1,4 +1,4 @@
-import { styled, css } from "styled-components";
+import { styled } from "styled-components";
 import { Header } from "../components/Header";
 import { useState } from "react";
 import { SmallCategories } from "../components/SmallCategories";
@@ -11,6 +11,7 @@ import { IconMapG } from "../assets";
 
 import { NavigationBar } from "./Index";
 import MyComponent from "./HpList/MyComponent";
+import { useGeolocation } from "./useGeolocation";
 
 // 애니메이션 발동을 위한 animate 타입 지정
 interface HpListBoxProps {
@@ -25,13 +26,24 @@ export interface LatLon {
 }
 export const SearchHp = () => {
   // HpListBox 가 화면에 보여진다면 true Y축 아래로 이동했다면 false
+  const token = localStorage.getItem("token");
+
   const [listScrolled, setListScrolled] = useState(true);
 
   const userLat = useRecoilValue(latAtom);
   const userLon = useRecoilValue(lngAtom);
   const nearLatLon = useRecoilValue(nearHospitalAtom);
   // 로딩 화면
-  console.log(userLat);
+  const location = useGeolocation();
+
+  console.log("내위치", location.coordinates?.lat, location.coordinates?.lng);
+
+  const mapCenter = token
+    ? { lat: userLat, lng: userLon }
+    : {
+        lat: location.coordinates?.lat,
+        lng: location.coordinates?.lng,
+      };
   const positions =
     nearLatLon?.map((data: LatLon, i: number) => ({
       wgs84Lat: data.wgs84Lat,
@@ -40,7 +52,6 @@ export const SearchHp = () => {
       title: i + 1,
     })) ?? [];
 
-  console.log(positions);
   // 애니메이션 발동 onClick 이벤트
 
   const handleSlideToggle = () => {
@@ -52,7 +63,7 @@ export const SearchHp = () => {
       <Wrapper>
         <Header />
         <Map
-          center={{ lat: userLat, lng: userLon }} // 지도의 중심 좌표
+          center={mapCenter} // 지도의 중심 좌표
           style={{
             width: "100%",
             height: "100%",

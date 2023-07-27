@@ -20,6 +20,8 @@ import {
   DeleteUserModalRef,
 } from "../components/MyPageModal";
 import axios from "axios";
+import { latAtom, lngAtom } from "../recoil/atoms";
+import { useRecoilState } from "recoil";
 
 interface Latlng {
   lat: number | null;
@@ -54,6 +56,8 @@ export const MyPage = () => {
 
   const changePWModalRef = useRef<ChangePWModalRef>(null);
   const deleteUserModalRef = useRef<DeleteUserModalRef>(null);
+  const [modifyLat, setModifyLat] = useRecoilState(latAtom);
+  const [modifyLng, setModifyLng] = useRecoilState(lngAtom);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -80,6 +84,8 @@ export const MyPage = () => {
     if (checkNum.length !== 3 || checkNum[0] !== "010") {
       toast(`연락처를 정확히 입력해 주세요. 입력 형식은 010-XXXX-XXXX 입니다.`);
     } else {
+      setModifyLat(latState);
+      setModifyLng(lonState);
       await instance.patch("/users/update", {
         name: nameState,
         phoneNumber: contectState,
@@ -219,7 +225,9 @@ export const MyPage = () => {
           <AddrGridBox>
             <Edit value={addr1State} readOnly />
             <Edit value={addr2State} readOnly />
-            <BasicButton onClick={handleAddrModalOpen}>주소 찾기</BasicButton>
+            <BasicButton small onClick={handleAddrModalOpen}>
+              주소 찾기
+            </BasicButton>
           </AddrGridBox>
         ) : (
           <Info>
@@ -287,6 +295,9 @@ const Info = styled.div`
 
 const Edit = styled.input`
   margin: 2%;
+  border: none;
+  border-bottom: 1px solid ${Colors.InputBorderOut};
+  outline: none;
 `;
 
 const HeaderWrap = styled.div`
