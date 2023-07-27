@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactNode } from "react";
-import VirtualScroll from "./VirtualScroll";
+import VirtualScroll, { RowRendererParams } from "./VirtualScroll";
 import { instance } from "../../services/Fetcher";
 import { useRecoilState } from "recoil";
 import { hpNameAtom, nearHospitalAtom } from "../../recoil/atoms";
@@ -10,7 +10,7 @@ import { LatLon } from "../SearchHp";
 
 interface ElemForm {
   i: number;
-  style: Element;
+  style: Object;
 }
 export interface ScrollDataForm extends LatLon {
   dutyName: string;
@@ -25,11 +25,11 @@ export interface ScrollDataForm extends LatLon {
   length: number;
 }
 
-export interface rowRendererForm {
-  index: any;
-  key: any;
-  style: any;
-}
+// export interface rowRendererForm {
+//   index: number;
+//   key: React.Key;
+//   style: Element;
+// }
 
 interface MyComponentProps {
   userLat: number;
@@ -139,7 +139,7 @@ export const MyComponent: React.FC<MyComponentProps> = ({
     }
   }, [scrollData.length]);
 
-  const rowRenderer = ({ index, key, style }: rowRendererForm) => (
+  const rowRenderer = ({ index, key, style }: RowRendererParams) => (
     <Elem key={key} i={index} style={style} />
   );
 

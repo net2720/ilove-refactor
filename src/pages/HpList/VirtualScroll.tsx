@@ -1,18 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, ReactNode } from "react";
 import throttle from "lodash/throttle";
-import { List, AutoSizer } from "react-virtualized";
+import { List, AutoSizer, ScrollParams } from "react-virtualized";
 import { ScrollDataForm } from "./MyComponent";
+
+export interface RowRendererParams {
+  index: number;
+  isScrolling: boolean;
+  isVisible: boolean;
+  key: string;
+  parent: Object;
+  style: Object;
+}
 
 export interface VirtualScrollForm {
   dataLength: number;
   hasMore: boolean;
   next: () => void;
-  loader: any;
+  loader: ReactNode;
   height: number;
   elementHeight: number;
-  rowRenderer: any;
+  rowRenderer: (params: RowRendererParams) => React.ReactElement;
   children: ScrollDataForm[];
-  onScroll?: any;
+  onScroll?: (e: ScrollParams) => void;
 }
 
 const VirtualScroll = ({
@@ -40,7 +49,7 @@ const VirtualScroll = ({
     onScroll,
   });
 
-  const scrollListener = (e: any) => {
+  const scrollListener = (e: ScrollParams) => {
     const { next, hasMore, onScroll } = props.current;
     if (typeof onScroll === "function") {
       setTimeout(() => onScroll && onScroll(e), 0);

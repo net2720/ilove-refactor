@@ -1,5 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import React, { MouseEventHandler, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FontSize } from "./constants/FontSize";
 import { BorderRadius, BorderColor } from "./constants/Border";
@@ -9,9 +9,9 @@ import { instance } from "./services/Fetcher";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { latAtom, lngAtom } from "./recoil/atoms";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
-
+import { toast, ToastContainer } from "react-toastify";
 interface IFormInput {
   email: string;
   pw: string;
@@ -50,7 +50,7 @@ export const LoginValidated = () => {
       onError: (error: any) => {
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError<any>;
-          alert(axiosError.response?.data.error.message);
+          toast.error(axiosError.response?.data.error.message);
         }
       },
       onSuccess: (response) => {
@@ -67,9 +67,6 @@ export const LoginValidated = () => {
 
         navigate("/");
       },
-      // onSettled: () => {
-      //   queryClient.invalidateQueries(mutationKey);
-      // },
     }
   );
 
@@ -81,6 +78,13 @@ export const LoginValidated = () => {
   };
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        closeButton={false}
+        autoClose={4000}
+        hideProgressBar
+      />
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
         <InputTitle>이메일</InputTitle>
         <LoginInput
@@ -190,13 +194,20 @@ export const SignUpValidated = () => {
 
       navigate("/login");
     } catch (error: any) {
-      alert(error.response.data.error.message);
+      toast(error.response.data.error.message);
     }
   };
 
   const { mutate } = useMutation(handleSignUp);
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        limit={1}
+        closeButton={false}
+        autoClose={4000}
+        hideProgressBar
+      />
       <LoginForm onSubmit={handleSubmit(onSubmit)}>
         <InputTitle>이름</InputTitle>
         <LoginInput
