@@ -42,7 +42,6 @@ export const MyComponent: React.FC<MyComponentProps> = ({
     const [nearHospitalData, setNearHospitalData] =
         useRecoilState(nearHospitalAtom);
 
-    console.log(hospitalNameInput);
     const Elem = ({ i, style }: ElemForm) => {
         const navigate = useNavigate();
         const handleLinkClick = () => {
@@ -78,47 +77,61 @@ export const MyComponent: React.FC<MyComponentProps> = ({
         );
     };
 
-    useEffect(() => {
-        setHospitalNameInput("");
-    }, []);
-
     const location = useGeolocation();
     const token = localStorage.getItem("token");
+
+    useEffect(() => {
+        console.log(hospitalNameInput);
+        if (hospitalNameInput === "") {
+            fetchDataNearHospital();
+        }
+
+        return () => {
+            setHospitalNameInput("");
+        };
+    }, [location.coordinates?.lat]);
+
+    // useEffect(() => {
+    //     return () => {
+    //         setHospitalNameInput("");
+    //     };
+    // }, []);
+    async function fetchDataNearHospital() {
+        let response;
+        if (token) {
+            response = await instance.get("/hospital/near", {
+                params: {
+                    userLat: userLat,
+                    userLon: userLon,
+                    r: distance,
+                },
+            });
+        } else {
+            response = await instance.get("/hospital/near", {
+                params: {
+                    userLat: location.coordinates?.lat,
+                    userLon: location.coordinates?.lng,
+                    r: distance,
+                },
+            });
+        }
+
+        setScrollData(response.data.data);
+        setNearHospitalData(response.data.data);
+        return response.data.data;
+    }
 
     const { data, isLoading } = useQuery<ScrollDataForm[]>(
         ["hpList", hospitalNameInput, location.coordinates?.lng],
         async () => {
-            if (hospitalNameInput) {
+            if (hospitalNameInput !== "") {
                 const response = await instance.get(
                     `/hospital/hp10/${hospitalNameInput}?size=10&page=1`
                 );
                 setScrollData(response.data.data);
                 return response.data.data;
             } else {
-                if (token) {
-                    const response = await instance.get("/hospital/near", {
-                        params: {
-                            userLat: userLat,
-                            userLon: userLon,
-                            r: distance,
-                        },
-                    });
-                    setScrollData(response.data.data);
-                    setNearHospitalData(response.data.data);
-                    return response.data.data;
-                } else {
-                    const response = await instance.get("/hospital/near", {
-                        params: {
-                            userLat: location.coordinates?.lat,
-                            userLon: location.coordinates?.lng,
-                            r: distance,
-                        },
-                    });
-                    setScrollData(response.data.data);
-                    setNearHospitalData(response.data.data);
-
-                    return response.data.data;
-                }
+                return fetchDataNearHospital();
             }
         },
         {
