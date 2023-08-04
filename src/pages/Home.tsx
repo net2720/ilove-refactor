@@ -39,109 +39,112 @@ import "slick-carousel/slick/slick-theme.css";
 }*/
 
 export const Home = () => {
-  const token = localStorage.getItem("token");
-  let showTab = "";
-  let hideTab = "none";
-  if (token) {
-    showTab = "none";
-    hideTab = "";
-  } else {
-    showTab = "";
-    hideTab = "none";
-  }
-  const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+    let showTab = "";
+    let hideTab = "none";
+    if (token) {
+        showTab = "none";
+        hideTab = "";
+    } else {
+        showTab = "";
+        hideTab = "none";
+    }
+    const navigate = useNavigate();
 
-  /*const [search, setSearch] = useState('');
+    /*const [search, setSearch] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');*/
 
-  const handleLogout = () => {
-    const role = localStorage.getItem("role");
+    const handleLogout = () => {
+        const role = localStorage.getItem("role");
 
-    if (token && role) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("role");
-      toast("로그아웃 성공");
-    } else {
-      toast("오류로 인해 로그아웃 하지 못했습니다.");
-    }
-    navigate("/");
-  };
+        if (token && role) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("role");
+            toast("로그아웃 성공");
+        } else {
+            toast("오류로 인해 로그아웃 하지 못했습니다.");
+        }
+        navigate("/");
+    };
 
-  return (
-    <>
-      <Container>
-        <ToastContainer
-          position="top-center"
-          limit={1}
-          closeButton={false}
-          autoClose={4000}
-          hideProgressBar
-        />
+    return (
+        <>
+            <Container>
+                <ToastContainer
+                    position="top-center"
+                    limit={1}
+                    closeButton={false}
+                    autoClose={4000}
+                    hideProgressBar
+                />
 
-        <TopMenuBar>
-          <MenuLogo>
-            <NewLogoImg src={newLogo} alt="아이사랑"></NewLogoImg>
-          </MenuLogo>
-          <FlexGrow></FlexGrow>
+                <TopMenuBar>
+                    <MenuLogo>
+                        <NewLogoImg src={newLogo} alt="아이사랑"></NewLogoImg>
+                    </MenuLogo>
+                    <FlexGrow></FlexGrow>
 
-          <MenuSeb>
-            <StyledLink to="/login">
-              <SebP style={{ display: showTab }}>로그인</SebP>
-            </StyledLink>
-          </MenuSeb>
+                    <MenuSeb>
+                        <StyledLink to="/login">
+                            <SebP style={{ display: showTab }}>로그인</SebP>
+                        </StyledLink>
+                    </MenuSeb>
 
-          <MenuSeb>
-            <LogoutBut style={{ display: hideTab }} onClick={handleLogout}>
-              로그아웃
-            </LogoutBut>
-          </MenuSeb>
+                    <MenuSeb>
+                        <LogoutBut
+                            style={{ display: hideTab }}
+                            onClick={handleLogout}
+                        >
+                            로그아웃
+                        </LogoutBut>
+                    </MenuSeb>
 
-          <MenuSeb>
-            <StyledLink to="/signUp">
-              <SebP style={{ display: showTab }}>회원가입</SebP>
-            </StyledLink>
-          </MenuSeb>
-        </TopMenuBar>
+                    <MenuSeb>
+                        <StyledLink to="/signUp">
+                            <SebP style={{ display: showTab }}>회원가입</SebP>
+                        </StyledLink>
+                    </MenuSeb>
+                </TopMenuBar>
 
-        <SearchBar />
+                <SearchBar />
 
-        <MainBannerImg />
-        <NavigationBar />
-      </Container>
-    </>
-  );
+                <MainBannerImg />
+                <NavigationBar />
+            </Container>
+        </>
+    );
 };
 
 const MainBannerImg = () => {
-  // 메인배너 이미지
-  const images = [{ img: banner1 }, { img: banner2 }, { img: banner3 }];
+    // 메인배너 이미지
+    const images = [{ img: banner1 }, { img: banner2 }, { img: banner3 }];
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 700,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true, // 자동 캐러셀
-    autoplaySpeed: 5000, // 자동 캐러셀 속도
-    pauseOnHover: true, // hover시 정지
-    fade: true,
-  };
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 700,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true, // 자동 캐러셀
+        autoplaySpeed: 5000, // 자동 캐러셀 속도
+        pauseOnHover: true, // hover시 정지
+        fade: true,
+    };
 
-  return (
-    <BannerCon>
-      <Slider {...settings}>
-        {images.map((img) => (
-          <BannerImg key={img.img} src={img.img} alt={img.img} />
-        ))}
-      </Slider>
-    </BannerCon>
-  );
+    return (
+        <BannerCon>
+            <Slider {...settings}>
+                {images.map((img) => (
+                    <BannerImg key={img.img} src={img.img} alt={img.img} />
+                ))}
+            </Slider>
+        </BannerCon>
+    );
 };
 
 const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: inherit;
+    text-decoration: none;
+    color: inherit;
 `;
 /*const H1 = styled.p`
   font-size: 28px;
@@ -196,38 +199,38 @@ const MainLogoImg = styled.img`
 `;*/
 
 const NewLogoImg = styled.img`
-  width: 100%;
+    width: 100%;
 `;
 
 const TopMenuBar = styled.div`
-  margin-top: 5%;
-  width: 95%;
-  // border-bottom: solid 2px ${Colors.primary};
-  display: flex;
+    margin-top: 5%;
+    width: 95%;
+    // border-bottom: solid 2px ${Colors.primary};
+    display: flex;
 `;
 
 const FlexGrow = styled.div`
-  flex-grow: 1;
+    flex-grow: 1;
 `;
 
 const MenuLogo = styled.div`
-  padding: 2% 0% 1% 3%;
-  width: 20%;
+    padding: 2% 0% 1% 3%;
+    width: 20%;
 `;
 
 const MenuSeb = styled.div`
-  padding: 2% 2% 1% 0%;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    padding: 2% 2% 1% 0%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const SebP = styled.p``;
 
 const LogoutBut = styled.p`
-  text-decoration: none;
-  color: inherit;
+    text-decoration: none;
+    color: inherit;
 `;
 
 /*const Banner = styled.div`
@@ -345,12 +348,12 @@ const Guide = styled.p`
 `;*/
 
 const BannerImg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 20px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
 `;
 
 const BannerCon = styled.div`
-  margin: 3% 0 8% 0;
+    margin: 3% 0 8% 0;
 `;
