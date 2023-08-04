@@ -36,12 +36,10 @@ export const SearchHp = () => {
     const location = useGeolocation();
     const searchLatLon = useRecoilValue(searchLatLngAtom);
 
-    const searchMapCenter = token
-        ? { lat: searchLatLon.searchLatAtom, lng: searchLatLon.searchLngAtom }
-        : {
-              lat: location.coordinates?.lat,
-              lng: location.coordinates?.lng,
-          };
+    const searchMapCenter = {
+        lat: searchLatLon.searchLatAtom,
+        lng: searchLatLon.searchLngAtom,
+    };
 
     const mapCenter = token
         ? { lat: userLat, lng: userLon }
