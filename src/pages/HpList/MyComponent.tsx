@@ -2,7 +2,11 @@ import React, { useState, useEffect, ReactNode } from "react";
 import VirtualScroll, { RowRendererParams } from "./VirtualScroll";
 import { instance } from "../../services/Fetcher";
 import { useRecoilState } from "recoil";
-import { hpNameAtom, nearHospitalAtom } from "../../recoil/atoms";
+import {
+    hpNameAtom,
+    nearHospitalAtom,
+    searchLatLngAtom,
+} from "../../recoil/atoms";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -41,6 +45,14 @@ export const MyComponent: React.FC<MyComponentProps> = ({
     const distance = 3;
     const [nearHospitalData, setNearHospitalData] =
         useRecoilState(nearHospitalAtom);
+    const [searchLatLon, setSearchLatLon] = useRecoilState(searchLatLngAtom);
+
+    useEffect(() => {
+        setSearchLatLon({
+            searchLatAtom: scrollData[0]?.wgs84Lat,
+            searchLngAtom: scrollData[0]?.wgs84Lon,
+        });
+    }, [scrollData]);
 
     const Elem = ({ i, style }: ElemForm) => {
         const navigate = useNavigate();
@@ -81,7 +93,6 @@ export const MyComponent: React.FC<MyComponentProps> = ({
     const token = localStorage.getItem("token");
 
     useEffect(() => {
-        console.log(hospitalNameInput);
         if (hospitalNameInput === "") {
             fetchDataNearHospital();
         }
@@ -91,11 +102,6 @@ export const MyComponent: React.FC<MyComponentProps> = ({
         };
     }, [location.coordinates?.lat]);
 
-    // useEffect(() => {
-    //     return () => {
-    //         setHospitalNameInput("");
-    //     };
-    // }, []);
     async function fetchDataNearHospital() {
         let response;
         if (token) {
@@ -118,6 +124,7 @@ export const MyComponent: React.FC<MyComponentProps> = ({
 
         setScrollData(response.data.data);
         setNearHospitalData(response.data.data);
+
         return response.data.data;
     }
 
@@ -129,6 +136,7 @@ export const MyComponent: React.FC<MyComponentProps> = ({
                     `/hospital/hp10/${hospitalNameInput}?size=10&page=1`
                 );
                 setScrollData(response.data.data);
+                setNearHospitalData(response.data.data);
                 return response.data.data;
             } else {
                 return fetchDataNearHospital();

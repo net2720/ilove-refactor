@@ -4,7 +4,12 @@ import { useState } from "react";
 import { BorderColor, BorderRadius } from "../constants/Border";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useRecoilValue } from "recoil";
-import { latAtom, lngAtom, nearHospitalAtom } from "../recoil/atoms";
+import {
+    latAtom,
+    lngAtom,
+    nearHospitalAtom,
+    searchLatLngAtom,
+} from "../recoil/atoms";
 import { IconMapG } from "../assets";
 import { NavigationBar } from "./Index";
 import MyComponent from "./HpList/MyComponent";
@@ -29,6 +34,14 @@ export const SearchHp = () => {
     const userLon = useRecoilValue(lngAtom);
     const nearLatLon = useRecoilValue(nearHospitalAtom);
     const location = useGeolocation();
+    const searchLatLon = useRecoilValue(searchLatLngAtom);
+
+    const searchMapCenter = token
+        ? { lat: searchLatLon.searchLatAtom, lng: searchLatLon.searchLngAtom }
+        : {
+              lat: location.coordinates?.lat,
+              lng: location.coordinates?.lng,
+          };
 
     const mapCenter = token
         ? { lat: userLat, lng: userLon }
@@ -43,7 +56,8 @@ export const SearchHp = () => {
             dutyName: data.dutyName,
             title: i + 1,
         })) ?? [];
-
+    console.log("주변병원", nearLatLon);
+    console.log("마커 포지션", positions);
     // 애니메이션 발동 onClick 이벤트
 
     const handleSlideToggle = () => {
@@ -54,39 +68,80 @@ export const SearchHp = () => {
         <>
             <Wrapper>
                 <Header />
-                <Map
-                    center={mapCenter} // 지도의 중심 좌표
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        zIndex: "1",
-                    }}
-                    level={4} // 지도 확대 레벨
-                >
-                    {positions.map((position: LatLon) => (
-                        <MapMarker
-                            position={{
-                                lat: position.wgs84Lat,
-                                lng: position.wgs84Lon,
+                {searchLatLon.searchLatAtom ? (
+                    <>
+                        <Map
+                            center={searchMapCenter} // 지도의 중심 좌표
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                zIndex: "1",
                             }}
-                            key={position.title}
-                            image={{
-                                src: IconMapG,
-                                size: {
-                                    width: 44,
-                                    height: 49,
-                                },
-                                options: {
-                                    offset: {
-                                        x: 27,
-                                        y: 69,
-                                    },
-                                },
+                            level={4} // 지도 확대 레벨
+                        >
+                            {positions.map((position: LatLon) => (
+                                <MapMarker
+                                    position={{
+                                        lat: position.wgs84Lat,
+                                        lng: position.wgs84Lon,
+                                    }}
+                                    key={position.title}
+                                    image={{
+                                        src: IconMapG,
+                                        size: {
+                                            width: 44,
+                                            height: 49,
+                                        },
+                                        options: {
+                                            offset: {
+                                                x: 27,
+                                                y: 69,
+                                            },
+                                        },
+                                    }}
+                                    title={position.dutyName}
+                                />
+                            ))}
+                        </Map>
+                    </>
+                ) : (
+                    <>
+                        <Map
+                            center={mapCenter} // 지도의 중심 좌표
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                zIndex: "1",
                             }}
-                            title={position.dutyName}
-                        />
-                    ))}
-                </Map>
+                            level={4} // 지도 확대 레벨
+                        >
+                            {positions.map((position: LatLon) => (
+                                <MapMarker
+                                    position={{
+                                        lat: position.wgs84Lat,
+                                        lng: position.wgs84Lon,
+                                    }}
+                                    key={position.title}
+                                    image={{
+                                        src: IconMapG,
+                                        size: {
+                                            width: 44,
+                                            height: 49,
+                                        },
+                                        options: {
+                                            offset: {
+                                                x: 27,
+                                                y: 69,
+                                            },
+                                        },
+                                    }}
+                                    title={position.dutyName}
+                                />
+                            ))}
+                        </Map>
+                    </>
+                )}
+
                 <HpListBox animate={listScrolled.toString()}>
                     <HpListHeaderBox>
                         <SlideBtn onClick={handleSlideToggle} />
