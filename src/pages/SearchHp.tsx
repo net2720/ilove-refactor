@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { Header } from "../components/Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BorderColor, BorderRadius } from "../constants/Border";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { useRecoilValue } from "recoil";
@@ -36,10 +36,18 @@ export const SearchHp = () => {
     const location = useGeolocation();
     const searchLatLon = useRecoilValue(searchLatLngAtom);
 
-    const searchMapCenter = {
+    const [searchMapCenter, setSearchMapCenter] = useState({
         lat: searchLatLon.searchLatAtom,
         lng: searchLatLon.searchLngAtom,
-    };
+    });
+
+    useEffect(() => {
+        setSearchMapCenter({
+            lat: searchLatLon.searchLatAtom,
+            lng: searchLatLon.searchLngAtom,
+        });
+        console.log(searchLatLon);
+    }, [searchLatLon]);
 
     const mapCenter = token
         ? { lat: userLat, lng: userLon }
@@ -54,8 +62,7 @@ export const SearchHp = () => {
             dutyName: data.dutyName,
             title: i + 1,
         })) ?? [];
-    console.log("주변병원", nearLatLon);
-    console.log("마커 포지션", positions);
+
     // 애니메이션 발동 onClick 이벤트
 
     const handleSlideToggle = () => {
