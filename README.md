@@ -1,46 +1,29 @@
-# Getting Started with Create React App
+**1.리팩토링 중점 사항**
+- CSS 유지보수성 개선
+- 지도 기능 개선 , 유저 UX 개선 
+- 타입스크립트 사용
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**2. 개선사항** 
 
-## Available Scripts
+2-1  CSS 유지보수 개선
+- 기존 프로젝트는 공통 컴포넌트에서 props를 이용해 각자 조건에 맞게 사용
+ - 변경 사항 생길 시 각자 컴포넌트에서 모두 변경해야 하는 불편한 발생
+ - 속성과 삼항연산자를 사용하여 공통 컴포넌트 수정 시 전체 프로젝트 유지보수 가능
 
-In the project directory, you can run:
+2-2 지도 부분 개선
+- 기존 프로젝트는 병원 검색 후 상세페이지에서 지도로 위치 확인
+ - 소아과 찾기가 주 아이템인데 2뎁스 들어가야 하는 점이 불편하다고 판단
+ - 병원 찾기에서 본인 위치 기준 병원 찾기 + 병원명 검색 시 해당 병원 주소 기준 지도 변경
 
-### `npm start`
+2-3 유저 UX 개선
+- 유저 개인정보 변경
+  - 회원 비밀번호 및 회원탈퇴 기능 추가 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2-4 타입스크립트 사용
+- 현업에서 대부분 사용 중이기에 경쟁력을 키우는 데 필요하다고 판단
+- 실제로 사용해보니 목적에 맞는 타입을 지정해주기 때문에 협업 단계에서     서로의 코드를이해하기쉬울 것 같다.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+**3. 추가 개선예정 사항** 
+- 현재 위치를 찾아주는 geolocation 함수가 https 접속이 가능한 배포 환경에서만 작동
+- 현재 배포는 팀원의 로컬 환경에서 배포 중이기에 현재 위치 찾아주는 기능 배포 서버에서 미작동
+- 클라우드 플랫폼을 활용하여 배포 필요
